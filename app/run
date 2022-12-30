@@ -1,0 +1,5 @@
+#!/bin/bash
+
+git pull
+source .venv/bin/activate
+PYTHONPATH='/usr/lib/python3/dist-packages' python $1

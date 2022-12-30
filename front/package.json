@@ -1,0 +1,16 @@
+{
+  "name": "frogcam",
+  "version": "1.0.0",
+  "description": "Camera to watch frogs",
+  "scripts": {
+    "serve": "http-server -p 8000 ./build/ -c-1",
+    "workbox": "workbox generateSW workbox-config.js"
+  },
+  "keywords": [],
+  "author": "Jan Berndt",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^14.1.1",
+    "workbox-cli": "^6.5.4"
+  }
+}

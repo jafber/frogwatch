@@ -1,0 +1,8 @@
+#!/bin/python
+
+from sys import argv
+from requests import get
+
+ip = get('http://ipv4.icanhazip.com').text
+with open(argv[1], 'w') as f:
+	f.write(ip)

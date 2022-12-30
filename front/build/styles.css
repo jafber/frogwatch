@@ -1,0 +1,92 @@
+body {
+	background-color: lightgreen;
+	display: flex;
+	padding: 0;
+	margin: 0;
+	justify-content: center;
+	align-items: stretch;
+	min-height: 100vh;
+}
+
+#video {
+	width: 480px;
+	height: 360px;
+	background-color: darkgreen;
+}
+
+#main {
+	padding: 2rem 0;
+	gap: 2rem;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	max-width: 800px;
+}
+
+#controls {
+	display: flex;
+	justify-content: space-around;
+}
+
+#controls button, #headericon::after {
+	border-radius: 10000px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+}
+
+#controls button {
+	width: 4rem;
+	height: 4rem;
+	background-color: darkgreen;
+	border-width: 0;
+	background-size: 60%;
+}
+
+#leftbutton {
+	background-image: url('img/left.png');
+}
+
+#rightbutton {
+	background-image: url('img/right.png');
+}
+
+#photobutton {
+	background-image: url('img/cam.png');
+}
+
+#header {
+	display: flex;
+	justify-content: space-between;
+	background-color: darkgreen;
+}
+
+#headericon {
+	position: relative;
+	margin-left: 2rem;
+	width: 6rem;
+	margin-right: 2rem;
+}
+
+#headericon::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 6rem;
+	height: 6rem;
+	transform: translateY(-50%);
+	background-color: darkgreen;
+	background-image: url('img/logo.png');
+	background-size: 50%;
+}
+
+h1 {
+	font-family: sans-serif;
+	font-style: normal;
+	font-weight: lighter;
+	margin: 1rem 0;
+	margin-left: 2rem;
+	font-size: 1rem;
+	color: white;
+}

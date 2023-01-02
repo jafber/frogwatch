@@ -1,17 +1,16 @@
-192.168.178.28
+# libcamera
 libcamera-jpeg -o /www-data/test.jpg
 libcamera-vid --width 1080 --height 720 --framerate 5 --codec h264 --inline --listen -o tcp://0.0.0.0:8000
 
-git bundle create git.pack master
-scp git.pack pi@raspberry:~/frogcam/
-
-import sys
-sys.path.append('/usr/lib/python3/dist-packages/')
-PYTHONPATH='/usr/lib/python3/dist-packages/' python wsgi.py
-PYTHONPATH='/usr/lib/python3/dist-packages/' python ws.py
-
+# dyndns cron job
 cp .notes/saveip /bin/
 chmod 755 /bin/saveip
 gh config set editor saveip
 cp .notes/dyndns /etc/cron.hourly
 chmod 755 /etc/cron.hourly/dyndns
+
+# supervisor
+sudo cp ./supervisor-conf.d /etc/supervisor/conf.d
+sudo supervisorctl reread
+sudo service supervisor restart
+sudo supervisorctl status

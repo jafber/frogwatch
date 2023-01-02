@@ -16,9 +16,8 @@ async def main():
 	parser = ArgumentParser()
 	parser.add_argument('--bind')
 	args = parser.parse_args()
-	ip = args.split(':')[0]
-	port = args.split(':')[1]
-	async with serve(send_frames, ip, port):
+	split = args.bind.split(':')
+	async with serve(send_frames, split[0], split[1]):
 		print('serving')
 		camera = Camera()
 		await Future()

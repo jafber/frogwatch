@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Camera to watch frogs",
   "scripts": {
-    "serve": "http-server -p 8000 ./build/ -c-1",
+    "serve": "http-server -p 8080 ./build/ -c-1",
     "workbox": "workbox generateSW workbox-config.js"
   },
   "keywords": [],

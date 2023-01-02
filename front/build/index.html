@@ -49,23 +49,12 @@
 			<h1>Froschkamera</h1>
 			<div id="headericon"></div>
 		</div>
-		<button onclick="contactServer">test</button>
-		<img id="output" />
-		<!--
-		<img id="video" src="http://raspberry:5000/video_feed">
+		<canvas id="output" width="640" height="428" onclick="reloadStream(this)"></canvas>
 		<div id="controls">
-			<button id="leftbutton" onclick="$post('http://raspberry:5000/servo_left')"></button>
-			<button id="photobutton" href="$post('http://raspberry:5000/picture')" download="frogcam.jpg"></button>
-			<button id="rightbutton" onclick="$post('http://raspberry:5000/servo_right')"></button>
+			<button id="leftbutton" onclick="apiRequest('post', '/servo_left')"></button>
+			<button id="photobutton" onclick="saveImage()"></button>
+			<button id="rightbutton" onclick="apiRequest('/servo_right')"></button>
 		</div>
-		-->
 	</div>
-	<script>
-		if ('serviceWorker' in navigator) {
-			window.addEventListener('load', () => {
-				navigator.serviceWorker.register('/sw.js')
-			})
-		}
-	</script>
 </body>
 </html>

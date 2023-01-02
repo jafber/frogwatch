@@ -90,3 +90,15 @@ h1 {
 	font-size: 1rem;
 	color: white;
 }
+
+canvas {
+	height: 30vh;
+}
+
+.popup {
+	z-index: 100;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}

@@ -1,1 +1,1 @@
-curl --cacert ../../ca.pem https://raspberry/
+curl --cert testclient/cert.pem --key testclient/cert-key.pem --cacert ca.pem https://raspberry/

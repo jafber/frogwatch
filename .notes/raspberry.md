@@ -10,7 +10,7 @@ cp .notes/dyndns /etc/cron.hourly
 chmod 755 /etc/cron.hourly/dyndns
 
 # supervisor
-sudo cp ./supervisor-conf.d /etc/supervisor/conf.d
+sudo cp ./supervisor-conf.d /etc/supervisor/conf.d/
 sudo supervisorctl reread
 sudo service supervisor restart
 sudo supervisorctl status

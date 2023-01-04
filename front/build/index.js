@@ -1,22 +1,23 @@
 const dynDns = 'https://gist.githubusercontent.com/CheeseCrustery/a80945ec5a6d0dfa8e067b0f9849d71c/raw/ca8e130b39603eddaafb1530bdec2a3e04fbd02a/ipv4.txt'
-const localDomain = '192.168.172.102'
+const localDomain = '192.168.178.102'
 let apiDomain = null
 let socket = null
 
 async function getApiDomain() {
 	try {
 		let localReq = $.get({
-			url: localUrl,
+			url: 'http://' + localDomain,
 			timeout: 500
 		})
 		await localReq
 		if (localReq.status < 400) {
-			console.log('using local url ' + localUrl)
-			return localUrl
+			console.log('using local domain ' + localDomain)
+			return localDomain
 		} else {
 			throw 'local url request failed with code ' + localReq.status
 		}
-	} catch {
+	} catch (err) {
+		console.log('local connection failed', err)
 		let dnsReq = $.get(dynDns)
 		let ip = await dnsReq
 		if (dnsReq.status < 400) {
@@ -51,7 +52,7 @@ async function reloadStream(canvas) {
 	console.log('reloading stream')
 	apiDomain = await getApiDomain()
 	if (apiDomain) {
-		const wsUrl = 'ws://' + apiDomain
+		const wsUrl = 'ws://' + apiDomain + '/ws'
 		console.log('starting websocket ' + wsUrl)
 		setupWebsocket(wsUrl, canvas)
 	}

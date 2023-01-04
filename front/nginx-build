@@ -1,0 +1,7 @@
+#!/bin/bash
+
+npx workbox generateSW workbox-config.js
+sudo mkdir -p /www-data/frogcam/
+sudo rm -r /www-data/frogcam/*
+sudo cp ./build/* /www-data/frogcam/
+sudo chmod 755 -r /www-data/frogcam/

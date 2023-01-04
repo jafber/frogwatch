@@ -14,3 +14,6 @@ sudo cp ./supervisor-conf.d /etc/supervisor/conf.d/
 sudo supervisorctl reread
 sudo service supervisor restart
 sudo supervisorctl status
+
+# curl
+curl --cert testclient/cert.pem --key testclient/cert-key.pem --cacert ca.pem https://raspberry/

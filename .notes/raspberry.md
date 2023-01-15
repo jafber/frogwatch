@@ -3,11 +3,13 @@ libcamera-jpeg -o /www-data/test.jpg
 libcamera-vid --width 1080 --height 720 --framerate 5 --codec h264 --inline --listen -o tcp://0.0.0.0:8000
 
 # dyndns cron job
-cp .notes/saveip /bin/
-chmod 755 /bin/saveip
-gh config set editor saveip
-cp .notes/dyndns /etc/cron.hourly
-chmod 755 /etc/cron.hourly/dyndns
+**WARNING**: /etc/cron.hourly only gets executed as root, which is not the right environment
+sudo cp .notes/saveip .notes/dyndns /usr/bin/
+sudo chmod 755 /usr/bin/saveip /usr/bin/dyndns
+sudo echo '* *	* * *	pi	dyndns /var/log/cron/dyndns' >> /etc/crontab
+sudo mkdir -p /var/log/cron/
+sudo chmod -R 777 /var/log/cron/
+sudo service cron start
 
 # supervisor
 sudo cp ./supervisor-conf.d /etc/supervisor/conf.d/

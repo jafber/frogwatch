@@ -1,3 +1,8 @@
+#!/bin/bash
+
+date >> $1
+echo "refresh with public ip $(curl --silent http://ipv4.icanhazip.com)" >> $1
+echo >> $1
 gh config set editor saveip
 gh gist edit a80945ec5a6d0dfa8e067b0f9849d71c -f ipv4.txt
 gh config set editor nano

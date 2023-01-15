@@ -1,3 +1,9 @@
+* {
+	box-sizing: border-box;
+}
+
+/* GENERAL */
+
 body {
 	background-color: lightgreen;
 	display: flex;
@@ -8,39 +14,87 @@ body {
 	min-height: 100vh;
 }
 
-#video {
-	width: 480px;
-	height: 360px;
-	background-color: darkgreen;
-}
-
 #main {
 	padding: 2rem 0;
 	gap: 2rem;
 	background-color: white;
 	display: flex;
 	flex-direction: column;
-	max-width: 800px;
+	width: 100%;
 }
+
+@media (orientation: landscape) {
+	#main {
+		max-width: 400px;
+	}
+}
+
+/* HEADER */
+
+#header {
+	display: flex;
+	justify-content: space-between;
+	background-color: lightgreen;
+	position: relative;
+}
+
+h1 {
+	font-family: sans-serif;
+	font-style: normal;
+	margin: 1rem;
+	font-size: 1.5rem;
+	color: darkgreen;
+}
+
+#header img {
+	position: absolute;
+	bottom: 0;
+	right: 1rem;
+	height: 5rem;
+	width: 5rem;
+}
+
+/* VIDEO */
+
+#video {
+	flex-grow: 1;
+	width: 100%;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+#video button {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+canvas {
+	position: absolute;
+	background-color: lightgreen;
+}
+
+
+/* CONTROLS */
 
 #controls {
 	display: flex;
 	justify-content: space-around;
 }
 
-#controls button, #headericon::after {
-	border-radius: 10000px;
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
-}
-
-#controls button {
+button {
 	width: 4rem;
 	height: 4rem;
-	background-color: darkgreen;
-	border-width: 0;
 	background-size: 60%;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	border: none;
+	background-color: darkgreen;
+	border-radius: 10000px;
 }
 
 #leftbutton {
@@ -55,50 +109,6 @@ body {
 	background-image: url('img/cam.png');
 }
 
-#header {
-	display: flex;
-	justify-content: space-between;
-	background-color: darkgreen;
-}
-
-#headericon {
-	position: relative;
-	margin-left: 2rem;
-	width: 6rem;
-	margin-right: 2rem;
-}
-
-#headericon::after {
-	content: "";
-	position: absolute;
-	top: 50%;
-	left: 0;
-	width: 6rem;
-	height: 6rem;
-	transform: translateY(-50%);
-	background-color: darkgreen;
-	background-image: url('img/logo.png');
-	background-size: 50%;
-}
-
-h1 {
-	font-family: sans-serif;
-	font-style: normal;
-	font-weight: lighter;
-	margin: 1rem 0;
-	margin-left: 2rem;
-	font-size: 1rem;
-	color: white;
-}
-
-canvas {
-	height: 30vh;
-}
-
-.popup {
-	z-index: 100;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+#playbutton {
+	background-image: url('img/play.png');
 }

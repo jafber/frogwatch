@@ -40,20 +40,22 @@
 	<link rel="stylesheet" href="styles.css">
 	<link rel="manifest" href="manifest.json">
 	<title>Document</title>
-	<script src="jquery-3.6.2.min.js"></script>
 	<script src="index.js"></script>
 </head>
 <body>
 	<div id="main">
 		<div id="header">
 			<h1>Froschkamera</h1>
-			<div id="headericon"></div>
+			<img src="img/logo.png" />
 		</div>
-		<canvas id="output" width="640" height="428" onclick="reloadStream(this)"></canvas>
+		<div id="video">
+			<canvas id="output"></canvas>
+			<button id="playbutton" onclick="reloadStream()"></button>
+		</div>
 		<div id="controls">
 			<button id="leftbutton" onclick="apiRequest('post', '/servo_left')"></button>
 			<button id="photobutton" onclick="saveImage()"></button>
-			<button id="rightbutton" onclick="apiRequest('/servo_right')"></button>
+			<button id="rightbutton" onclick="apiRequest('post', '/servo_right')"></button>
 		</div>
 	</div>
 </body>

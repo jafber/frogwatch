@@ -79,9 +79,6 @@ async function reloadStream() {
 }
 
 function resizeCanvas(canvas) {
-	
-	console.log('re')
-
 	// calculate h and w so canvas covers the container
 	const ratio = 16 / 9
 	let pw = canvas.parentElement.offsetWidth
@@ -97,8 +94,6 @@ function resizeCanvas(canvas) {
 	}
 	
 	// set canvas style
-	// canvas.style.top = '50%'
-	// canvas.style.bottom = '50%'
 	canvas.style.transform = 'rotate(-90deg)'
 	canvas.style.width = h + 'px'
 	canvas.style.height = w + 'px'
@@ -114,7 +109,7 @@ window.onload = () => {
 	// pwa
 	console.log('checking service worker', 'serviceWorker' in navigator)
 	if ('serviceWorker' in navigator) {
-		//navigator.serviceWorker.register('/sw.js')
+		navigator.serviceWorker.register('/sw.js')
 		console.log('service worker registered')
 	}
 

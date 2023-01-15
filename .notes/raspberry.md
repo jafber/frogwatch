@@ -17,5 +17,13 @@ sudo supervisorctl reread
 sudo service supervisor restart
 sudo supervisorctl status
 
+# nginx
+sudo cp ~/frogcam/.notes/nginx /etc/nginx/sites-available/frogcam
+sudo ln --symbolic /etc/nginx/sites-available/frogcam /etc/nginx/sites-enabled/
+nginx -s reload
+sudo mkdir -p /www-data/frogcam
+sudo cp -r ~/frogcam/front/build/* /www-data/frogcam/
+sudo chown www-data -R /www-data/frogcam/
+
 # curl
 curl --cert testclient/cert.pem --key testclient/cert-key.pem --cacert ca.pem https://raspberry/

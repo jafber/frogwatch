@@ -21,7 +21,10 @@ sudo supervisorctl status
 sudo cp ~/frogcam/.notes/nginx /etc/nginx/sites-available/frogcam
 sudo ln --symbolic /etc/nginx/sites-available/frogcam /etc/nginx/sites-enabled/
 nginx -s reload
+
+# frontend
 sudo mkdir -p /www-data/frogcam
+sudo rm -r /www-data/frogcam/*
 sudo cp -r ~/frogcam/front/build/* /www-data/frogcam/
 sudo chown www-data -R /www-data/frogcam/
 

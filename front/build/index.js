@@ -56,7 +56,7 @@ function setupWebsocket(url, canvas, playButton) {
 		lastRefresh[0] = new Date()
 		const blob = event.data
 		const bitmap = await createImageBitmap(blob)
-		context.drawImage(bitmap, 0, 0)
+		context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height, 0, 0, canvas.width, canvas.height)
 		socket.send('')
 	})
 

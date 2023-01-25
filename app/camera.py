@@ -13,7 +13,7 @@ class Camera:
 		self.frame = None
 		self.last_access = 0
 		self.cam = Picamera2()
-		cfg = self.cam.create_still_configuration(main={'size': (3280/2, 2464/2)})
+		cfg = self.cam.create_still_configuration(main={'size': (int(3280/2), int(2464/2))})
 		self.cam.configure(cfg)
 		self.cam.start()
 

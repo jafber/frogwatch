@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Camera to watch frogs",
   "scripts": {
-    "start": "http-server -p 8080 ./build/ -c-1",
-    "workbox": "workbox generateSW workbox-config.js"
+    "start": "http-server -p 8080 ./dist/ -c-1"
   },
+  "private": true,
   "keywords": [],
   "author": "Jan Berndt",
   "license": "ISC",

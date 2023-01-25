@@ -1,6 +1,9 @@
 const dynDns = 'https://gist.githubusercontent.com/CheeseCrustery/a80945ec5a6d0dfa8e067b0f9849d71c/raw/ipv4.txt'
 const localDomain = '192.168.178.102'
 const wsTimeoutS = 10
+const imageSensorWidth = 3280
+const imageSensorHeight = 2464
+
 let apiDomain = null
 let socket = null
 let checkTask = null
@@ -30,6 +33,12 @@ async function getApiDomain() {
 	}
 }
 
+async function drawBlob(blob, canvas) {
+	const bitmap = await createImageBitmap(blob)
+	const context = canvas.getContext('2d')
+	context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height, 0, 0, canvas.width, canvas.height)
+}
+
 function setupWebsocket(url, canvas, playButton) {
 
 	// close old socket
@@ -54,9 +63,7 @@ function setupWebsocket(url, canvas, playButton) {
 	let lastRefresh = [new Date()]
 	socket.addEventListener('message', async function (event) {
 		lastRefresh[0] = new Date()
-		const blob = event.data
-		const bitmap = await createImageBitmap(blob)
-		context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height, 0, 0, canvas.width, canvas.height)
+		await drawBlob(event.data, canvas)
 		socket.send('')
 	})
 
@@ -79,11 +86,13 @@ async function reloadStream() {
 }
 
 function resizeCanvas(canvas) {
+	canvas.width = imageSensorWidth/2
+	canvas.height = imageSensorHeight/2
 	// calculate h and w so canvas covers the container
-	const ratio = 16 / 9
+	const ratio = imageSensorWidth / imageSensorHeight
 	let pw = canvas.parentElement.offsetWidth
 	let ph = canvas.parentElement.offsetHeight
-	if (ph / pw >= 16 / 9) {
+	if (ph / pw >= ratio) {
 		// container is too high
 		var h = ph
 		var w = ph / ratio
@@ -103,16 +112,20 @@ function saveImage() {
 
 }
 
-window.onload = () => {
-	resizeCanvas(document.getElementById('output'))
+window.onload = async () => {
+	const canvas = document.getElementById('output')
+	resizeCanvas(canvas)
 
 	// pwa
 	console.log('checking service worker', 'serviceWorker' in navigator)
 	if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('/sw.js')
-		console.log('service worker registered')
+		//navigator.serviceWorker.register('/sw.js')
+		//console.log('service worker registered')
 	}
 
+	let res = await fetch('img/test.jpg')
+	let blob = await res.blob()
+	await drawBlob(blob, canvas)
 }
 
 window.onresize = () => { resizeCanvas(document.getElementById('output')) }

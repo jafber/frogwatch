@@ -1,5 +1,5 @@
 # libcamera
-libcamera-jpeg -o /www-data/test.jpg
+libcamera-jpeg -o /www-data/frogcam/test.jpg
 libcamera-vid --width 1080 --height 720 --framerate 5 --codec h264 --inline --listen -o tcp://0.0.0.0:8000
 
 # dyndns cron job

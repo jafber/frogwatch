@@ -119,13 +119,9 @@ window.onload = async () => {
 	// pwa
 	console.log('checking service worker', 'serviceWorker' in navigator)
 	if ('serviceWorker' in navigator) {
-		//navigator.serviceWorker.register('/sw.js')
-		//console.log('service worker registered')
+		navigator.serviceWorker.register('/sw.js')
+		console.log('service worker registered')
 	}
-
-	let res = await fetch('img/test.jpg')
-	let blob = await res.blob()
-	await drawBlob(blob, canvas)
 }
 
 window.onresize = () => { resizeCanvas(document.getElementById('output')) }

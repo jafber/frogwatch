@@ -10,6 +10,7 @@
   "author": "Jan Berndt",
   "license": "ISC",
   "dependencies": {
+    "favicons-generate": "^0.0.15",
     "http-server": "^14.1.1",
     "workbox-cli": "^6.5.4"
   }

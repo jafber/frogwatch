@@ -1,3 +1,30 @@
+# api
+## /front
+front > back {
+	'type': 'auth',
+	'session': 1234,
+}
+front > back {
+	'type': 'get_image',
+	'current_hash': 'jpoirmg;sdf' (first 16 digits of md5)
+}
+front > back {
+	'type': 'move_servo',
+	'is_to_right': bool
+}
+back > front { blob }
+
+## /raspi
+back > raspi {
+	'type': 'init_stream',
+	'last_update': 12345
+}
+back > raspi {
+	'type': 'move_servo',
+	'is_to_right': bool
+}
+raspi > back { blob }
+
 # libcamera
 libcamera-jpeg -o /www-data/frogcam/test.jpg
 libcamera-vid --width 1080 --height 720 --framerate 5 --codec h264 --inline --listen -o tcp://0.0.0.0:8000

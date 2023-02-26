@@ -1,6 +1,6 @@
-app/.venv/
-app/__pycache__/
-app/secret.py
-front/node_modules/
+.venv/
+__pycache__/
+secret.py
+node_modules/
 .experiments/
 .vscode/

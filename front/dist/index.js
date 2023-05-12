@@ -1,5 +1,5 @@
 const dynDns = 'https://gist.githubusercontent.com/CheeseCrustery/a80945ec5a6d0dfa8e067b0f9849d71c/raw/ipv4.txt'
-const localDomain = '192.168.178.102'
+const localDomain = 'localhost:8001'
 const wsTimeoutS = 10
 const imageSensorWidth = 3280
 const imageSensorHeight = 2464

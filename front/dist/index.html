@@ -50,12 +50,12 @@
 		</div>
 		<div id="video">
 			<canvas id="output"></canvas>
-			<button id="playbutton" onclick="reloadStream()"></button>
+			<button id="playbutton" onclick="setupWebsocket()"></button>
 		</div>
 		<div id="controls">
-			<button id="leftbutton" onclick="apiRequest('post', '/servo_left')"></button>
+			<button id="leftbutton" onclick="turnServo(false)"></button>
 			<button id="photobutton" onclick="saveImage()"></button>
-			<button id="rightbutton" onclick="apiRequest('post', '/servo_right')"></button>
+			<button id="rightbutton" onclick="turnServo(true)"></button>
 		</div>
 	</div>
 </body>

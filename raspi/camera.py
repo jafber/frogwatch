@@ -12,12 +12,18 @@ class Camera:
 		self.thread = None
 		self.frame = None
 		self.last_access = 0
+		self.on_new_image = None
+		
+        # init picamera2
 		self.cam = Picamera2()
-		cfg = self.cam.create_still_configuration(main={'size': (int(3280/2), int(2464/2))})
+		cfg = self.cam.create_still_configuration(main={
+			'size': (int(3280/2), int(2464/2))
+	    })
 		self.cam.configure(cfg)
 		self.cam.start()
 
-	def initialize(self):
+	def initialize(self, on_new_image):
+		self.on_new_image = on_new_image
 		if self.thread is None:
 			self.thread = Thread(target=self._thread)
 			self.thread.start()
@@ -36,6 +42,7 @@ class Camera:
 			self.cam.capture_file(stream, format='jpeg')
 			stream.seek(0)
 			self.frame = stream.read()
+			self.on_new_image(self.frame)
 			stream.seek(0)
 			stream.truncate()
 		print('stopping thread')

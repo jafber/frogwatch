@@ -92,11 +92,12 @@ map $http_upgrade $connection_upgrade {
 }
 
 server {
+    # this needs to be merged with the default homepage config
 	listen 80;
-	server_name raspberry;
+	server_name jan-berndt.de *.jan-berndt.de;
 
 	# websocket camera stream
-	location /ws {
+	location /frogcam/ws {
 		# https://websockets.readthedocs.io/en/stable/howto/nginx.html
 		# https://www.nginx.com/blog/websocket-nginx/
 		proxy_pass http://127.0.0.1:8001/;
@@ -107,8 +108,8 @@ server {
 	}
 
 	# serve web app
-	location / {
-		root /www-data/frogcam;
+	location /frogcam {
+		root /var/www/html;
 	}
 }
 
@@ -116,9 +117,8 @@ server {
 
 # frontend
 ```bash
-sudo rm -r /www-data/frogcam/ 2> /dev/null
-sudo mkdir -p /www-data/frogcam/
-sudo cp -r ~/frogcam/front/dist/* /www-data/frogcam/
-sudo chown www-data -R /www-data/frogcam/
+rm -r /var/www/html/frogcam/
+mkdir -p /var/www/html/frogcam/
+cp -r ~/frogcam/front/dist/* /var/www/html/frogcam/
 sudo certbot certonly --dry-run --standalone -d www.jan-berndt.de -d jan-berndt.de -d www.dein-schoenstes-i.ch -d dein-schoenstes-i.ch -d xn--dein-schnstes-ich-6zb.de -d www.xn--dein-schnstes-ich-6zb.de
 ```

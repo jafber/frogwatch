@@ -12,9 +12,12 @@ async def maintain_connection(url, images, delay_s):
                 print(f'sending image {i}')
                 await socket.send(images[i])
                 i = (i + 1) % len(images)
-    finally:
+    except asyncio.CancelledError:
+        print('program cancelled')
+        return False
+    except:
         print('connection closed')
-        return
+        return True
 
 async def main(url, imgpath, delay_s):
     # get all paths to images
@@ -32,8 +35,9 @@ async def main(url, imgpath, delay_s):
     
     # connect to server and keep sending image loop
     while True:
-        await maintain_connection(url, images, delay_s)
+        if not await maintain_connection(url, images, delay_s):
+            break
         await asyncio.sleep(5)
 
 if __name__ == '__main__':
-    asyncio.run(main('ws://127.0.0.1:8001/raspi', pathlib.Path('amogus/'), 0.1))
+    asyncio.run(main('wss://jan-berndt.de/frogcam/ws/raspi', pathlib.Path(__file__).parent / 'amogus', 0.1))

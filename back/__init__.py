@@ -4,6 +4,7 @@ from time import time
 import logging
 
 import websockets
+from websockets.exceptions import ConnectionClosed
 
 class FrontConnection:
     def __init__(self, session, socket):
@@ -63,8 +64,11 @@ async def handle_front(socket):
                     'type': 'move_servo',
                     'is_to_right': msg['is_to_right'],
                 })
+    except ConnectionClosed:
+        logging.info(f'frontend {session} closed connection')
     finally:
-        logging.info(f'frontend connection {session} terminated')
+        logging.info(f'terminating frontend connection {session}...')
+        await socket.close()
         front_connections.pop(session)
 
 # keep a connection to the raspi alive
@@ -84,8 +88,11 @@ async def handle_raspi(socket):
                 if conn.is_ready_for_image:
                     logging.info(f'sending image {image_id(current_image)} to conn {conn.session}')
                     await conn.socket.send(current_image)
+    except ConnectionClosed:
+        logging.warning('raspi closed connection')
     finally:
-        logging.warning('raspi connection terminated')
+        logging.info('terminating raspi connection')
+        await socket.close()
         raspi_connection = None
 
 # handle an incoming ws connection

@@ -30,6 +30,7 @@ async def send_to_raspi(msg):
 # keep a connection to the frontend alive
 async def handle_front(socket):
     # no authentication for now, just a session id
+    logging.info('established new front connetion')
     msgraw = await socket.recv()
     logging.info(f'frontend received "{msgraw}"')
     auth = json.loads(msgraw)
@@ -89,9 +90,10 @@ async def handle_raspi(socket):
 
 # handle an incoming ws connection
 async def handler(conn):
-    if conn.path == '/front':
+    logging.info(f'got connection to {conn.path}')
+    if conn.path.endswith('/front'):
         await handle_front(conn)
-    elif conn.path == '/raspi':
+    elif conn.path.endswith('/raspi'):
         await handle_raspi(conn)
 
 async def main():

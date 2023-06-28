@@ -1,4 +1,4 @@
-const backendUrl = 'ws://localhost:8001/front'
+const backendUrl = 'wss://jan-berndt.de/frogcam/ws/front'
 const wsTimeoutS = 10
 const imageSensorWidth = 3280
 const imageSensorHeight = 2464
@@ -63,7 +63,7 @@ function setupWebsocket() {
 
     // close old socket
     cleanUp()
-    
+
     // start websocket ping-pong
     socket = new WebSocket(backendUrl)
     playButton.hidden = true
@@ -71,7 +71,7 @@ function setupWebsocket() {
         send(messageType.open)
         send(messageType.getImage)
     })
-    
+ 
     // refresh canvas image with each incoming message
     lastRefresh = new Date()
     socket.addEventListener('message', async function (event) {
@@ -104,7 +104,7 @@ function resizeCanvas() {
         var w = pw
         var h = pw * ratio
     }
-    
+
     // set canvas style
     canvas.style.transform = 'rotate(-90deg)'
     canvas.style.width = h + 'px'

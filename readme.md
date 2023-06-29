@@ -64,7 +64,7 @@ sudo service cron start
 [program:frogcam]
 directory=/home/pi/frogcam/raspi
 environment=PYTHONPATH=/usr/lib/python3/dist-packages
-command=/home/pi/frogcam/.venv/bin/python raspi/__init__.py --url wss://jan-berndt.de/frogcam/ws/raspi --port 443
+command=/home/pi/frogcam/.venv/bin/python raspi/__init__.py --url wss://jan-berndt.de/frogcam/ws/raspi
 autostart=true
 autorestart=true
 stderr_logfile=/var/log/frogcam/raspi.err.log
@@ -86,12 +86,11 @@ sudo supervisorctl status
 ```
 [program:frogcam]
 directory=/home/frogcam/frogcam/
-environment=PYTHONPATH=/usr/lib/python3/dist-packages
-command=/home/pi/frogcam/app/.venv/bin/python ws.py --bind 127.0.0.1:8001
+command=/home/frogcam/frogcam/.venv/bin/python back/__init__.py --bind 127.0.0.1:8001
 autostart=true
 autorestart=true
-stderr_logfile=/var/log/frogcam/ws.err.log
-stdout_logfile=/var/log/frogcam/ws.out.log
+stderr_logfile=/var/log/frogcam/back.err.log
+stdout_logfile=/var/log/frogcam/back.out.log
 ```
 
 ## nginx

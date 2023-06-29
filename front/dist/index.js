@@ -47,7 +47,12 @@ async function send(msgType) {
 async function drawBlob() {
     const bitmap = await createImageBitmap(currentImage)
     const context = canvas.getContext('2d')
-    context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height, 0, 0, canvas.width, canvas.height)
+    context.drawImage(bitmap,
+        0, // dx
+        0, // dy
+        bitmap.width, // dWidth
+        bitmap.height // dHeight
+    )
 }
 
 // close old websocket and clear image

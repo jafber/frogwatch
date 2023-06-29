@@ -15,10 +15,10 @@ async def listen_for_init(websocket):
 async def main():
 	global camera
 	parser = ArgumentParser()
-	parser.add_argument('--bind')
+	parser.add_argument('--url')
+	parser.add_argument('--port')
 	args = parser.parse_args()
-	split = args.bind.split(':')
-	async with serve(listen_for_init, split[0], split[1]):
+	async with serve(listen_for_init, args.url, args.port):
 		print('serving')
 		camera = Camera()
 		await Future()

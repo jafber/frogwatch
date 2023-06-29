@@ -1,27 +1,28 @@
 from asyncio import run, Future
 from argparse import ArgumentParser
+from json import loads
 
-from websockets import serve
+import websockets
 from camera import Camera
 
-camera = None
-
-async def listen_for_init(websocket):
-	async def handle_new_image(img):
-		await websocket.send(img)
-	async for _ in websocket:
-		camera.initialize(handle_new_image)
-
 async def main():
-	global camera
-	parser = ArgumentParser()
-	parser.add_argument('--url')
-	parser.add_argument('--port')
-	args = parser.parse_args()
-	async with serve(listen_for_init, args.url, args.port):
-		print('serving')
-		camera = Camera()
-		await Future()
+    parser = ArgumentParser()
+    parser.add_argument('--url')
+    args = parser.parse_args()
+    camera = Camera()
+    async for socket in websockets.connect(args.url):
+        # we make our own image handler so the connectionclosed error is caught
+        async def handle_new_image(blob):
+            try:
+                socket.send(blob)
+            except websockets.ConnectionClosed:
+                pass
+        try:
+            msg = loads(await socket.recv())
+            assert msg['type'] == 'init_stream'
+            camera.start_stream(handle_new_image)
+        except websockets.ConnectionClosed:
+            continue
 
 if __name__ == '__main__':
     run(main())

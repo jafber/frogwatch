@@ -40,4 +40,4 @@ async def main(url, imgpath, delay_s):
         await asyncio.sleep(5)
 
 if __name__ == '__main__':
-    asyncio.run(main('wss://jan-berndt.de/frogcam/ws/raspi', pathlib.Path(__file__).parent / 'amogus', 0.1))
+    asyncio.run(main('wss://jan-berndt.de/frogcam/ws/raspi', pathlib.Path(__file__).parent / 'testimage', 0.1))

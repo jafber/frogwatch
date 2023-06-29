@@ -1,5 +1,7 @@
 # frogcam
 
+2023, Jan Berndt (me@jan-berndt.de)
+
 # api
 ## /front
 ```
@@ -9,7 +11,7 @@ front > back {
 }
 front > back {
 	'type': 'get_image',
-	'current_hash': 'jpoirmg;sdf' (first 16 digits of md5)
+	'current_hash': 231 // 8-bit-uint created by XORing all bytes
 }
 front > back {
 	'type': 'move_servo',
@@ -30,20 +32,20 @@ back > raspi {
 raspi > back { blob }
 ```
 
-# Snippets
+
+# Raspberry
+
+## SSH
+https://superuser.com/a/1013998/1139103
+```bash
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pi@$(curl -s 'https://gist.githubusercontent.com/CheeseCrustery/a80945ec5a6d0dfa8e067b0f9849d71c/raw/ipv4.txt')
+```
 
 ## libcamera
 ```bash
 libcamera-jpeg -o /www-data/frogcam/test.jpg
 libcamera-vid --width 1080 --height 720 --framerate 5 --codec h264 --inline --listen -o tcp://0.0.0.0:8000
 ```
-
-## curl
-```bash
-curl --cert testclient/cert.pem --key testclient/cert-key.pem --cacert ca.pem https://raspberry/
-```
-
-# Installation
 
 ## dyndns cron job
 **WARNING**: /etc/cron.hourly only gets executed as root, which is not the right environment
@@ -56,7 +58,23 @@ sudo chmod -R 777 /var/log/cron/
 sudo service cron start
 ```
 
-# supervisor
+## websockets session
+/etc/supervisor/conf.d/frogcam.conf
+```
+[program:frogcam]
+directory=/home/pi/frogcam/raspi
+environment=PYTHONPATH=/usr/lib/python3/dist-packages
+command=/home/pi/frogcam/.venv/bin/python raspi/__init__.py --url wss://jan-berndt.de/frogcam/ws/raspi --port 443
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/frogcam/raspi.err.log
+stdout_logfile=/var/log/frogcam/raspi.out.log
+```
+
+
+# Server
+
+## supervisor
 ```bash
 sudo nano /etc/supervisor/conf.d/frogcam.conf
 sudo supervisorctl reread
@@ -76,7 +94,7 @@ stderr_logfile=/var/log/frogcam/ws.err.log
 stdout_logfile=/var/log/frogcam/ws.out.log
 ```
 
-# nginx
+## nginx
 ```bash
 sudo nano /etc/nginx/sites-available/frogcam
 sudo ln --symbolic /etc/nginx/sites-available/frogcam /etc/nginx/sites-enabled/
@@ -109,16 +127,8 @@ server {
 
 	# serve web app
 	location /frogcam {
-		root /var/www/html;
+		alias /home/frogcam/frogcam/front/dist;
 	}
 }
 
-```
-
-# frontend
-```bash
-rm -r /var/www/html/frogcam/
-mkdir -p /var/www/html/frogcam/
-cp -r ~/frogcam/front/dist/* /var/www/html/frogcam/
-sudo certbot certonly --dry-run --standalone -d www.jan-berndt.de -d jan-berndt.de -d www.dein-schoenstes-i.ch -d dein-schoenstes-i.ch -d xn--dein-schnstes-ich-6zb.de -d www.xn--dein-schnstes-ich-6zb.de
 ```

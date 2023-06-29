@@ -34,14 +34,14 @@ class Camera:
         self.on_new_image = None
         self.last_update = 0
 
-    # capture jpgs and send the blob to our callback until self.last_access times out
+    # capture jpgs and send the blob to our callback until self.last_update times out
     def stream(self):
         stream = BytesIO()
         print('starting thread')
         while True:
             self.cam.capture_file(stream, format='jpeg')
             stream.seek(0)
-            if self.on_new_image and time() - self.last_access < self.TIMEOUT_S:
+            if self.on_new_image and time() - self.last_update < self.TIMEOUT_S:
                 self.on_new_image(stream.read())
                 stream.seek(0)
                 stream.truncate()

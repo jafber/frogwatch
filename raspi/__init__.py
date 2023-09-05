@@ -36,7 +36,7 @@ def main(log):
                     assert msg['type'] == 'init_stream'
                     log.info(f'got message {msg}')
                     if not camera:
-                        camera = Camera()
+                        camera = Camera(log)
                     camera.start_stream(handle_new_image)
             except websockets.ConnectionClosed as e:
                 log.error(f'connection closed {e}')

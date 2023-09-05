@@ -13,10 +13,17 @@ class FrontConnection:
         self.is_waiting_for_image = False
 
 IMAGE_TIMEOUT_S = 10
-current_image_time = None
+current_image_time = 0.0
 current_image = bytes()
 front_connections = {}
 raspi_connection = None
+log = None
+
+# make logs look nice
+def configure_logging():
+    log_format = "%(asctime)s [%(levelname)s]\t%(message)s"
+    date_format = "%Y-%m-%d %H:%M:%S"
+    logging.basicConfig(format=log_format, datefmt=date_format, level=logging.INFO)
 
 # get image's identifier (8-bit-uint created by XORing all bytes)
 def image_id(img):
@@ -106,10 +113,9 @@ async def handler(conn):
         await handle_raspi(conn)
 
 async def main():
-    logging.basicConfig(level=logging.INFO)
-    logging.info('starting server')
     async with websockets.serve(handler, "", 8001):
         await asyncio.Future()
 
 if __name__ == '__main__':
+    configure_logging()
     asyncio.run(main())

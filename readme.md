@@ -2,8 +2,9 @@
 
 2023, Jan Berndt (me@jan-berndt.de)
 
-# api
-## /front
+## API
+
+### /front
 ```
 front > back {
 	'type': 'auth',
@@ -19,7 +20,8 @@ front > back {
 }
 back > front { blob }
 ```
-## /raspi
+
+### /raspi
 ```
 back > raspi {
 	'type': 'init_stream',
@@ -32,22 +34,21 @@ back > raspi {
 raspi > back { blob }
 ```
 
+## RASPBERRY
 
-# Raspberry
-
-## SSH
+### SSH
 https://superuser.com/a/1013998/1139103
 ```bash
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pi@$(curl -s 'https://gist.githubusercontent.com/CheeseCrustery/a80945ec5a6d0dfa8e067b0f9849d71c/raw/ipv4.txt')
 ```
 
-## libcamera
+### libcamera
 ```bash
-libcamera-jpeg -o /www-data/frogcam/test.jpg
+libcamera-jpeg -o /var/www/html/test.jpg
 libcamera-vid --width 1080 --height 720 --framerate 5 --codec h264 --inline --listen -o tcp://0.0.0.0:8000
 ```
 
-## dyndns cron job
+### dyndns cron job
 **WARNING**: /etc/cron.hourly only gets executed as root, which is not the right environment
 ```bash
 sudo cp .notes/saveip .notes/dyndns /usr/bin/
@@ -58,7 +59,12 @@ sudo chmod -R 777 /var/log/cron/
 sudo service cron start
 ```
 
-## websockets session
+### occasional restart cron job so the process does not shit itself and die
+```
+34 *  * * *  root  supervisorctl restart frogcam
+```
+
+### websockets session
 /etc/supervisor/conf.d/frogcam.conf
 ```
 [program:frogcam]
@@ -71,17 +77,15 @@ stderr_logfile=/var/log/frogcam/raspi.err.log
 stdout_logfile=/var/log/frogcam/raspi.out.log
 ```
 
+## BACKEND SERVER
 
-# Server
-
-## supervisor
+### supervisor
 ```bash
 sudo nano /etc/supervisor/conf.d/frogcam.conf
 sudo supervisorctl reread
 sudo service supervisor restart
 sudo supervisorctl status
 ```
-
 /etc/supervisor/conf.d/frogcam.conf
 ```
 [program:frogcam]
@@ -93,13 +97,12 @@ stderr_logfile=/var/log/frogcam/back.err.log
 stdout_logfile=/var/log/frogcam/back.out.log
 ```
 
-## nginx
+### nginx
 ```bash
 sudo nano /etc/nginx/sites-available/frogcam
 sudo ln --symbolic /etc/nginx/sites-available/frogcam /etc/nginx/sites-enabled/
 nginx -s reload
 ```
-
 /etc/nginx/sites-available/frogcam
 ```
 # http 'Upgrade' header is mapped to 'upgrade' by default, or 'close' if 'Connection' header is empty

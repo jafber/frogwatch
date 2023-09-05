@@ -1,4 +1,4 @@
-from time import time, sleep
+from time import time
 from io import BytesIO
 from threading import Thread
 
@@ -8,7 +8,8 @@ class Camera:
 
     TIMEOUT_S = 10
 
-    def __init__(self):
+    def __init__(self, log):
+        self.log = log
         self.thread = None # threading.Thread of self.stream
         self.last_update = 0 # unix time float
         self.on_new_image = None # callback for the jpg blobs
@@ -36,8 +37,8 @@ class Camera:
 
     # capture jpgs and send the blob to our callback until self.last_update times out
     def stream(self):
+        self.log.info('camera starting thread')
         stream = BytesIO()
-        print('starting thread')
         while True:
             self.cam.capture_file(stream, format='jpeg')
             stream.seek(0)
@@ -47,5 +48,5 @@ class Camera:
                 stream.truncate()
             else:
                 break
-        print('stopping thread')
+        self.log.info('camera stopping thread')
         self.thread = None

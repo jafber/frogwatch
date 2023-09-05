@@ -10,8 +10,10 @@ class FrontConnection:
     def __init__(self, session, socket):
         self.session = session
         self.socket = socket
-        self.is_ready_for_image = False
+        self.is_waiting_for_image = False
 
+IMAGE_TIMEOUT_S = 10
+current_image_time = None
 current_image = bytes()
 front_connections = {}
 raspi_connection = None
@@ -48,11 +50,11 @@ async def handle_front(socket):
             if msg['type'] == 'get_image':
                 logging.info(f'received image request on frontend connection {session}')
                 # send image directly if we have a new one
-                if msg['current_hash'] != image_id(current_image):
-                    conn.is_ready_for_image = False
+                if msg['current_hash'] != image_id(current_image) and time() - current_image_time < IMAGE_TIMEOUT_S:
+                    conn.is_waiting_for_image = False
                     await socket.send(current_image)
                 else:
-                    conn.is_ready_for_image = True
+                    conn.is_waiting_for_image = True
                 # tell raspi to start streaming
                 await send_to_raspi({
                     'type': 'init_stream',
@@ -85,7 +87,7 @@ async def handle_raspi(socket):
             logging.info(f'received image {image_id(current_image)}')
             # directly send image to all frontends that are currently waiting
             for conn in front_connections.values():
-                if conn.is_ready_for_image:
+                if conn.is_waiting_for_image:
                     logging.info(f'sending image {image_id(current_image)} to conn {conn.session}')
                     await conn.socket.send(current_image)
     except ConnectionClosed:

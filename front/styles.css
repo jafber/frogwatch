@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    font-size: 16px;
+}
+
+body {
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+@media (orientation: landscape) {
+    body {
+        flex-direction: row;
+    }
+}
+
+/* HEADER */
+
+#header {
+    padding: 1rem 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    position: relative;
+}
+
+h1 {
+    font-family: sans-serif;
+    font-style: normal;
+    font-size: 2rem;
+    color: darkgreen;
+}
+
+#header img {
+    width: 3rem;
+    height: 3rem;
+}
+
+@media (orientation: landscape) {
+    #header {
+        display: none;
+    }
+}
+
+/* VIDEO */
+/* canvas sizing and overflow behavior is handled by js */
+
+#main {
+    background: red;
+    flex: 1;
+    position: relative;
+}
+
+#output {
+    background-color: green;
+}
+
+#playbutton {
+    z-index: 1;
+    position: absolute;
+    background-image: url('img/play.png');
+}
+
+/* CONTROLS */
+
+#controls {
+    margin: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    width: 4rem;
+    height: 4rem;
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    border: none;
+    background-color: darkgreen;
+    border-radius: 10000px;
+}
+
+#leftbutton {
+    background-image: url('img/left.png');
+}
+
+#rightbutton {
+    background-image: url('img/right.png');
+}
+
+#photobutton {
+    background-image: url('img/cam.png');
+}
+
+@media (orientation: landscape) {
+    #controls  {
+        flex-direction: column;
+    }
+}

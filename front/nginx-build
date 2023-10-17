@@ -1,6 +1,0 @@
-#!/bin/bash
-
-sudo mkdir -p /www-data/frogcam/
-sudo rm -r /www-data/frogcam/*
-sudo cp -r ./dist/* /www-data/frogcam/
-sudo chmod 755 -R /www-data/frogcam/

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <link rel="stylesheet" href="styles.css">
+    <title>Froschkamera</title>
+     <script src="test.js"></script> 
+</head>
+<body>
+    <div id="header">
+        <h1>Froschkamera</h1>
+        <img alt="" src="img/logo.png" />
+    </div>
+    <div id="main">
+        <canvas id="output" width="1640" height="1232"></canvas>
+        <button id="playbutton"></button>
+    </div>
+    <div id="controls">
+        <button id="leftbutton" onclick="turnServo(false)"></button>
+        <button id="photobutton"></button>
+        <button id="rightbutton" onclick="turnServo(true)"></button>
+    </div>
+</body>
+</html>

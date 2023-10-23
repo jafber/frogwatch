@@ -54,7 +54,6 @@ h1 {
 /* canvas sizing and overflow behavior is handled by js */
 
 #main {
-    background: red;
     flex: 1;
     position: relative;
 }

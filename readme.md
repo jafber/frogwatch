@@ -5,6 +5,7 @@
 ## API
 
 ### /front
+
 ```
 front > back {
 	'type': 'auth',
@@ -22,6 +23,7 @@ back > front { blob }
 ```
 
 ### /raspi
+
 ```
 back > raspi {
 	'type': 'init_stream',
@@ -37,19 +39,24 @@ raspi > back { blob }
 ## RASPBERRY
 
 ### SSH
+
 https://superuser.com/a/1013998/1139103
+
 ```bash
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pi@$(curl -s 'https://gist.githubusercontent.com/CheeseCrustery/a80945ec5a6d0dfa8e067b0f9849d71c/raw/ipv4.txt')
 ```
 
 ### libcamera
+
 ```bash
 libcamera-jpeg -o /var/www/html/test.jpg
 libcamera-vid --width 1080 --height 720 --framerate 5 --codec h264 --inline --listen -o tcp://0.0.0.0:8000
 ```
 
 ### dyndns cron job
+
 **WARNING**: /etc/cron.hourly only gets executed as root, which is not the right environment
+
 ```bash
 sudo cp .notes/saveip .notes/dyndns /usr/bin/
 sudo chmod 755 /usr/bin/saveip /usr/bin/dyndns
@@ -60,12 +67,15 @@ sudo service cron start
 ```
 
 ### occasional restart cron job so the process does not shit itself and die
+
 ```
 34 *  * * *  root  supervisorctl restart frogcam
 ```
 
 ### websockets session
+
 /etc/supervisor/conf.d/frogcam.conf
+
 ```
 [program:frogcam]
 directory=/home/pi/frogcam/raspi
@@ -80,13 +90,16 @@ stdout_logfile=/var/log/frogcam/raspi.out.log
 ## BACKEND SERVER
 
 ### supervisor
+
 ```bash
 sudo nano /etc/supervisor/conf.d/frogcam.conf
 sudo supervisorctl reread
 sudo service supervisor restart
 sudo supervisorctl status
 ```
+
 /etc/supervisor/conf.d/frogcam.conf
+
 ```
 [program:frogcam]
 directory=/home/frogcam/frogcam/
@@ -98,25 +111,33 @@ stdout_logfile=/var/log/frogcam/back.out.log
 ```
 
 ### nginx
+
 ```bash
 sudo nano /etc/nginx/sites-available/frogcam
 sudo ln --symbolic /etc/nginx/sites-available/frogcam /etc/nginx/sites-enabled/
 nginx -s reload
 ```
-/etc/nginx/sites-available/frogcam
+
+/etc/nginx/sites-available/homepage
+
 ```
-# http 'Upgrade' header is mapped to 'upgrade' by default, or 'close' if 'Connection' header is empty
-map $http_upgrade $connection_upgrade {
-	default upgrade;
-	'' close;
+server {
+	listen 80;
+
+	...
+
+	# skip language check for frogcam
+	location /frogcam {
+		return 301 https://jan-berndt.de$request_uri;
+	}
 }
 
 server {
-    # this needs to be merged with the default homepage config
-	listen 80;
-	server_name jan-berndt.de *.jan-berndt.de;
+	listen 443 ssl;
 
-	# websocket camera stream
+	...
+
+	# frogcam websocket camera stream
 	location /frogcam/ws {
 		# https://websockets.readthedocs.io/en/stable/howto/nginx.html
 		# https://www.nginx.com/blog/websocket-nginx/
@@ -127,9 +148,9 @@ server {
 		proxy_set_header Host $host;
 	}
 
-	# serve web app
+	# frogcam html page
 	location /frogcam {
-		alias /home/frogcam/frogcam/front/dist;
+		alias /home/frogcam/frogcam/front;
 	}
 }
 

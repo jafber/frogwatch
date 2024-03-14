@@ -112,10 +112,10 @@ async def handler(conn):
     elif conn.path.endswith('/raspi'):
         await handle_raspi(conn)
 
-async def main():
-    async with websockets.serve(handler, "", 8001):
+async def main(port):
+    async with websockets.serve(handler, "", port):
         await asyncio.Future()
 
 if __name__ == '__main__':
     configure_logging()
-    asyncio.run(main())
+    asyncio.run(main(3000))

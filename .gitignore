@@ -4,3 +4,4 @@ secret.py
 node_modules/
 .experiments/
 .vscode/
+.misc/

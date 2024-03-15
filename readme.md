@@ -121,6 +121,11 @@ nginx -s reload
 /etc/nginx/sites-available/homepage
 
 ```
+map $http_upgrade $connection_upgrade {
+	default upgrade;
+	'' close;
+}
+
 server {
 	listen 80;
 
@@ -154,4 +159,11 @@ server {
 	}
 }
 
+```
+
+## docker
+
+```
+docker build -t jan/frogcam .
+docker run -d -p 3000:3000 jan/frogcam
 ```

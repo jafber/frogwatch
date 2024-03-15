@@ -40,4 +40,7 @@ async def main(url, imgpath, delay_s):
         await asyncio.sleep(5)
 
 if __name__ == '__main__':
-    asyncio.run(main('ws://localhost:3000/raspi', pathlib.Path(__file__).parent / 'testimage', 0.1))
+    asyncio.run(main(
+        url='ws://localhost:3000/raspi', 
+        imgpath=pathlib.Path(__file__).parent / 'testimage', 
+        delay_s=0.1))

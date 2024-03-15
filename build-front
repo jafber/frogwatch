@@ -1,0 +1,6 @@
+#/usr/bin/fish
+
+set prod /var/www/html/frogcam
+rm -rf $prod 2> /dev/null
+mkdir -p $prod
+cp -r front/* "$prod"/

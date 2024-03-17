@@ -16,7 +16,7 @@ class ConnectionHandler:
         self.current_image = bytes()
         self.fronts = {}
         self.raspi = None
-    
+
     # send message to raspi
     async def send_to_raspi(self, msg):
         if self.raspi:
@@ -28,7 +28,7 @@ class ConnectionHandler:
         for b in self.current_image:
             hash ^= b
         return hash
-    
+
     # return true when the current image is not older than IMAGE_TIMEOUT_S
     def current_image_valid(self):
         return time() - self.current_image_time < self.IMAGE_TIMEOUT_S
@@ -38,7 +38,8 @@ class ConnectionHandler:
         logging.info('established new front connection')
         conn = FrontConnection(socket, self)
         session = await conn.authenticate()
-        assert not session in self.front_connections
+        assert not session in self.fronts
+        logging.info(f'authenticated session {session}')
         self.fronts[session] = conn
         try:
             await conn.keep_open()

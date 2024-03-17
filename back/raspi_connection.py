@@ -28,5 +28,5 @@ class RaspiConnection:
             # directly send image to all frontends that are currently waiting
             for conn in self.handler.fronts.values():
                 if conn.is_waiting_for_image:
-                    logging.info(f'sending image {self.handler.current_image_id()} to conn {conn.session}')
+                    logging.info(f'sending awaited image {self.handler.current_image_id()} to {conn.session}')
                     await conn.socket.send(self.handler.current_image)

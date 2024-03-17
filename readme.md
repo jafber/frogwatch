@@ -1,49 +1,15 @@
-# frogcam
+# Frogcam
 
 2023, Jan Berndt (me@jan-berndt.de)
 
-## API
+## Raspberry Pi
 
-### /front
-
-```
-front > back {
-	'type': 'auth',
-	'session': 1234,
-}
-front > back {
-	'type': 'get_image',
-	'current_hash': 231 // 8-bit-uint created by XORing all bytes
-}
-front > back {
-	'type': 'move_servo',
-	'is_to_right': bool
-}
-back > front { blob }
-```
-
-### /raspi
-
-```
-back > raspi {
-	'type': 'init_stream',
-	'last_update': 12345
-}
-back > raspi {
-	'type': 'move_servo',
-	'is_to_right': bool
-}
-raspi > back { blob }
-```
-
-## RASPBERRY
-
-### SSH
+### ssh
 
 https://superuser.com/a/1013998/1139103
 
 ```bash
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pi@$(curl -s 'https://gist.githubusercontent.com/CheeseCrustery/a80945ec5a6d0dfa8e067b0f9849d71c/raw/ipv4.txt')
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pi@$(curl -s $DYNDNS_IP)
 ```
 
 ### libcamera
@@ -53,72 +19,36 @@ libcamera-jpeg -o /var/www/html/test.jpg
 libcamera-vid --width 1080 --height 720 --framerate 5 --codec h264 --inline --listen -o tcp://0.0.0.0:8000
 ```
 
-### dyndns cron job
-
-**WARNING**: /etc/cron.hourly only gets executed as root, which is not the right environment
-
-```bash
-sudo cp .notes/saveip .notes/dyndns /usr/bin/
-sudo chmod 755 /usr/bin/saveip /usr/bin/dyndns
-sudo echo '* *	* * *	pi	dyndns /var/log/cron/dyndns' >> /etc/crontab
-sudo mkdir -p /var/log/cron/
-sudo chmod -R 777 /var/log/cron/
-sudo service cron start
-```
-
-### occasional restart cron job so the process does not shit itself and die
-
-```
-34 *  * * *  root  supervisorctl restart frogcam
-```
-
-### websockets session
-
-/etc/supervisor/conf.d/frogcam.conf
-
-```
-[program:frogcam]
-directory=/home/pi/frogcam/raspi
-environment=PYTHONPATH=/usr/lib/python3/dist-packages
-command=/home/pi/frogcam/.venv/bin/python raspi/__init__.py --url wss://jan-berndt.de/frogcam/ws/raspi
-autostart=true
-autorestart=true
-stderr_logfile=/var/log/frogcam/raspi.err.log
-stdout_logfile=/var/log/frogcam/raspi.out.log
-```
-
-## BACKEND SERVER
-
 ### supervisor
 
 ```bash
-sudo nano /etc/supervisor/conf.d/frogcam.conf
-sudo supervisorctl reread
-sudo service supervisor restart
-sudo supervisorctl status
+cp /raspi/scripts/frogcam.conf /etc/supervisor/conf.d
+supervisorctl reload
 ```
 
-/etc/supervisor/conf.d/frogcam.conf
+
+### dyndns
+
+```bash
+cp /raspi/scripts/dyndns /raspi/scripts/saveip /usr/bin/
+```
+
+### cron
+
+**WARNING**: /etc/cron.hourly only gets executed as root, which is not the right environment
+
+`/etc/crontab`
 
 ```
-[program:frogcam]
-directory=/home/frogcam/frogcam/
-command=/home/frogcam/frogcam/.venv/bin/python back/__init__.py --bind 127.0.0.1:8001
-autostart=true
-autorestart=true
-stderr_logfile=/var/log/frogcam/back.err.log
-stdout_logfile=/var/log/frogcam/back.out.log
+* *     * * *   pi dyndns /var/log/cron/dyndns
+34 *    * * *   root supervisorctl restart frogcam
 ```
+
+## Server
 
 ### nginx
 
-```bash
-sudo nano /etc/nginx/sites-available/frogcam
-sudo ln --symbolic /etc/nginx/sites-available/frogcam /etc/nginx/sites-enabled/
-nginx -s reload
-```
-
-/etc/nginx/sites-available/homepage
+`/etc/nginx/sites-available/jan-berndt.de.conf`
 
 ```
 map $http_upgrade $connection_upgrade {
@@ -158,12 +88,46 @@ server {
 		alias /home/frogcam/frogcam/front;
 	}
 }
-
 ```
 
-## docker
+### docker
+
+```bash
+chmod +x ./build ./run
+./build
+./run
+```
+
+## WSS API
+
+### /front
 
 ```
-docker build -t jan/frogcam .
-docker run -d -p 3000:3000 jan/frogcam
+front > back {
+	'type': 'auth',
+	'session': 1234,
+}
+front > back {
+	'type': 'get_image',
+	'current_hash': 231 // 8-bit-uint created by XORing all bytes
+}
+front > back {
+	'type': 'move_servo',
+	'is_to_right': bool
+}
+back > front { blob }
+```
+
+### /raspi
+
+```
+back > raspi {
+	'type': 'init_stream',
+	'last_update': 12345
+}
+back > raspi {
+	'type': 'move_servo',
+	'is_to_right': bool
+}
+raspi > back { blob }
 ```

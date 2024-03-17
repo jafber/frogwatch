@@ -22,15 +22,14 @@ libcamera-vid --width 1080 --height 720 --framerate 5 --codec h264 --inline --li
 ### supervisor
 
 ```bash
-cp /raspi/scripts/frogcam.conf /etc/supervisor/conf.d
+cp raspi/scripts/frogcam.conf /etc/supervisor/conf.d
 supervisorctl reload
 ```
-
 
 ### dyndns
 
 ```bash
-cp /raspi/scripts/dyndns /raspi/scripts/saveip /usr/bin/
+cp raspi/scripts/dyndns raspi/scripts/saveip /usr/bin/
 ```
 
 ### cron
@@ -93,7 +92,7 @@ server {
 ### docker
 
 ```bash
-chmod +x ./build ./run
+chmod +x build run
 ./build
 ./run
 ```

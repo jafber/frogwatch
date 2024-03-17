@@ -1,9 +1,10 @@
 #!/bin/bash
 
+gist_id='REPLACE'
 logfile='/var/log/cron/dyndns'
 date >> $logfile
 echo "refresh with public ip $(curl --silent http://ipv4.icanhazip.com)" >> $logfile
 echo >> $logfile
 gh config set editor saveip
-gh gist edit a80945ec5a6d0dfa8e067b0f9849d71c -f ipv4.txt
+gh gist edit $gist_id -f ipv4.txt
 gh config set editor nano

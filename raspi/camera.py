@@ -30,11 +30,6 @@ class Camera:
             self.thread = Thread(target=self.stream)
             self.thread.start()
 
-    # stop the thread
-    def stop_stream(self):
-        self.on_new_image = None
-        self.last_update = 0
-
     # capture jpgs and send the blob to our callback until self.last_update times out
     def stream(self):
         self.log.info('camera starting thread')

@@ -4,4 +4,4 @@ set prod /var/www/html/frogcam
 rm -rf $prod 2> /dev/null
 mkdir -p $prod
 cp -r front/* "$prod"/
-docker build -t jafber/frogcam-back
+docker build -t jafber/frogcam-back .

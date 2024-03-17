@@ -23,12 +23,13 @@ async def main(url, imgpath, delay_s):
     # get all paths to images
     image_paths = []
     for path in imgpath.iterdir():
-        if path.is_file():
+        if path.is_file() and path.suffix.lower() == '.jpg':
             image_paths.append(path)
     
     # read images in correct order
+    image_paths.sort(key=lambda path: int(path.stem))
     images = []
-    for path in sorted(image_paths):
+    for path in image_paths:
         print(f'reading {path}')
         with open(path, 'rb') as file:
             images.append(file.read())
@@ -41,6 +42,7 @@ async def main(url, imgpath, delay_s):
 
 if __name__ == '__main__':
     asyncio.run(main(
-        url='ws://localhost:3000/raspi', 
-        imgpath=pathlib.Path(__file__).parent / 'testimage', 
+        #url='wss://jan-berndt.de/frogcam/ws/raspi', 
+        url='ws://localhost:3000/raspi',
+        imgpath=pathlib.Path(__file__).parent / 'frog', 
         delay_s=0.1))

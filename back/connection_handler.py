@@ -38,7 +38,7 @@ class ConnectionHandler:
         logging.info('established new front connection')
         conn = FrontConnection(socket, self)
         session = await conn.authenticate()
-        assert not session in self.front_connections
+        assert not session in self.fronts
         self.fronts[session] = conn
         try:
             await conn.keep_open()
@@ -72,3 +72,6 @@ class ConnectionHandler:
             await self.handle_front(conn)
         elif conn.path.endswith('/raspi'):
             await self.handle_raspi(conn)
+        else:
+            logging.warning(f'unknown connection path {conn.path}')
+            await conn.close()

@@ -24,7 +24,7 @@ class RaspiConnection:
     async def keep_open(self):
         while not self.socket.closed:
             self.handler.current_image = await self.socket.recv()
-            logging.info(f'received image {self.handler.current_image_id()}')
+            # logging.info(f'received image {self.handler.current_image_id()}')
             # directly send image to all frontends that are currently waiting
             for conn in self.handler.fronts.values():
                 if conn.is_waiting_for_image:

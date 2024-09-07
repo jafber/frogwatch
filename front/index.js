@@ -1,4 +1,4 @@
-const STREAM_URL = 'wss://jan-berndt.de/frogcam/ws/front'
+const STREAM_URL = '/ws/front'
 const WS_TIMEOUT_S = 5
 const VIDEO_WIDTH = 1640
 const VIDEO_HEIGHT = 1232
@@ -20,7 +20,7 @@ async function blobHash(imageBlob) {
 }
 
 // use websocket to send a message
-async function webSocketMessage(webSocket, msgType, currentImageBlob = null) {
+async function sendMessage(webSocket, msgType, currentImageBlob = null) {
     let msg = {
         type: msgType,
     }
@@ -82,11 +82,12 @@ function saveImage(imageBlob) {
 
 // init and maintain websocket connection to the backend image stream
 function setupWebsocket(onMessage, onClose) {
+    console.log('setting up websocket to ' + STREAM_URL)
     // tell backend to start sending
     const webSocket = new WebSocket(STREAM_URL)
     webSocket.addEventListener('open', async function () {
-        await webSocketMessage(webSocket, MESSAGE_TYPE.open)
-        await webSocketMessage(webSocket, MESSAGE_TYPE.getImage)
+        await sendMessage(webSocket, MESSAGE_TYPE.open)
+        await sendMessage(webSocket, MESSAGE_TYPE.getImage)
     })
 
     // listen for incoming messages
@@ -94,7 +95,7 @@ function setupWebsocket(onMessage, onClose) {
     webSocket.addEventListener('message', async function (event) {
         lastRefresh = new Date()
         await onMessage(event.data)
-        await webSocketMessage(webSocket, MESSAGE_TYPE.getImage, event.data)
+        await sendMessage(webSocket, MESSAGE_TYPE.getImage, event.data)
     })
 
     // check if stream is still alive
@@ -112,15 +113,17 @@ function setupWebsocket(onMessage, onClose) {
 function startVideo(playButton, canvas) {
     playButton.hidden = true
     const handleClose = () => {
+        console.log('websocket closed')
         playButton.hidden = false
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
     }
-    const output = {}
+    //const output = {}
+    let currentImage = null
     setupWebsocket(async (imageBlob) => {
-        output.currentImage = imageBlob
+        currentImage = imageBlob
         await drawBlob(imageBlob, canvas)
     }, handleClose)
-    return output
+    return currentImage
 }
 
 // main

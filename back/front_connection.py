@@ -43,4 +43,4 @@ class FrontConnection:
             msgraw = await self.socket.recv()
             logging.info(f'frontend received "{msgraw}"')
             msg = json.loads(msgraw)
-            self.handle_msg(msg)
+            await self.handle_msg(msg)

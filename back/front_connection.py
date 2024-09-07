@@ -26,6 +26,7 @@ class FrontConnection:
             # send image directly if we have a new one
             if msg['current_hash'] != self.handler.current_image_id and self.handler.current_image_valid:
                 self.is_waiting_for_image = False
+                logging.info(f'sending image {self.handler.current_image_id()} to {self.session}')
                 await self.socket.send(self.handler.current_image)
             else:
                 self.is_waiting_for_image = True

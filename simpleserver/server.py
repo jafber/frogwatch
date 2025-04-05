@@ -6,8 +6,7 @@ PORT = 8765
 
 async def handle_connection(websocket):
     async for message in websocket:
-        print(f"Received message: {message} on path {websocket.request.path}")
-        await websocket.send("hello world")
+        await websocket.send(f"Received message: {message} on path {websocket.request.path}")
 
 async def main():
     server = await websockets.serve(handle_connection, HOST, PORT)

@@ -5,3 +5,10 @@ services:
       context: ./simpleserver
       dockerfile: Dockerfile
     restart: always
+
+  front:
+    image: nginx
+    expose:
+      - 80
+    volumes:
+      - ./front:/usr/share/nginx/html

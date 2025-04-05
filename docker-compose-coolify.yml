@@ -1,0 +1,14 @@
+services:
+  back:
+    image: jafber/frogwatch-back
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    restart: always
+
+  front:
+    image: nginx
+    volumes:
+      - ./front:/usr/share/nginx/html
+    ports:
+      - 80:80

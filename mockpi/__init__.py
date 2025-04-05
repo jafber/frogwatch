@@ -47,7 +47,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         url = sys.argv[1]
     else:
-        url = 'ws://localhost:3000/'
+        url = 'wss://frogwatch.jan-berndt.de/ws'
     print(f'using url {url}')
     asyncio.run(main(
         url=url,

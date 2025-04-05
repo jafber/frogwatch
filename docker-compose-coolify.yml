@@ -1,12 +1,7 @@
 services:
-  back:
-    image: jafber/frogwatch-back
+  simpleserver:
+    image: jafber/frogwatch-simpleserver
     build:
-      context: ./back
+      context: ./simpleserver
       dockerfile: Dockerfile
     restart: always
-
-  front:
-    image: nginx
-    volumes:
-      - ./front:/usr/share/nginx/html

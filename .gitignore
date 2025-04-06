@@ -6,3 +6,4 @@ node_modules/
 .experiments/
 .vscode/
 .misc/
+*.env

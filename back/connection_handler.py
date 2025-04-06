@@ -11,11 +11,12 @@ class ConnectionHandler:
 
     IMAGE_TIMEOUT_S = 10
 
-    def __init__(self):
+    def __init__(self, raspi_token):
         self.current_image_time = 0.0
         self.current_image = bytes()
         self.fronts = {}
         self.raspi = None
+        self.raspi_token = raspi_token
 
     # send message to raspi
     async def send_to_raspi(self, msg):
@@ -52,11 +53,15 @@ class ConnectionHandler:
 
     # register a new raspi connection and do stuff with it
     async def handle_raspi(self, socket):
+        conn = RaspiConnection(socket, self, self.raspi_token)
+        if not await conn.authenticate():
+            await socket.close()
+            return
         if self.raspi and not self.raspi.socket.closed:
             logging.warning('raspi connection overwritten')
             await self.raspi.socket.close()
         logging.info('raspi connection established')
-        self.raspi = RaspiConnection(socket, self)
+        self.raspi = conn
         try:
             await self.raspi.keep_open()
         except ConnectionClosed:

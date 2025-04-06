@@ -2,9 +2,17 @@ from time import time
 import logging
 
 class RaspiConnection:
-    def __init__(self, socket, handler):
+    def __init__(self, socket, handler, token):
         self.socket = socket
         self.handler = handler
+        self.token = token
+    
+    async def authenticate(self):
+        token = await self.socket.recv()
+        is_ok = (token == self.token)
+        if not is_ok:
+            logging.error(f'invalid token {token}')
+        return is_ok
 
     # generate a message for starting the stream
     def init_msg():

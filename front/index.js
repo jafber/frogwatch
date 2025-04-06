@@ -1,4 +1,4 @@
-const STREAM_URL = '/ws/front'
+const STREAM_URL = 'wss://frogwatch.jan-berndt.de/ws/front'
 const WS_TIMEOUT_S = 5
 const VIDEO_WIDTH = 1640
 const VIDEO_HEIGHT = 1232
@@ -117,13 +117,12 @@ function startVideo(playButton, canvas) {
         playButton.hidden = false
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
     }
-    //const output = {}
-    let currentImage = null
+    const output = {}
     setupWebsocket(async (imageBlob) => {
-        currentImage = imageBlob
+        output.currentImage = imageBlob
         await drawBlob(imageBlob, canvas)
     }, handleClose)
-    return currentImage
+    return output
 }
 
 // main

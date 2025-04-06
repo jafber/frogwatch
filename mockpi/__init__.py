@@ -2,11 +2,16 @@ import asyncio
 import websockets
 import pathlib
 import sys
+from os import getenv
+
+BASE_URL = 'wss://frogwatch.jan-berndt.de/ws/raspi'
+RASPI_TOKEN = getenv("RASPI_TOKEN")
 
 async def maintain_connection(url, images, delay_s):
     print('attempting connection...')
     try:
         async with websockets.connect(url) as socket:
+            await socket.send(RASPI_TOKEN)
             i = 0
             while True:
                 await asyncio.sleep(delay_s)
@@ -44,10 +49,7 @@ async def main(url, imgpath, delay_s):
         await asyncio.sleep(5)
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        url = sys.argv[1]
-    else:
-        url = 'wss://frogwatch.jan-berndt.de/ws'
+    url = f'{sys.argv[1]}/ws/raspi'
     print(f'using url {url}')
     asyncio.run(main(
         url=url,

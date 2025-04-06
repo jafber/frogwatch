@@ -1,12 +1,15 @@
 from argparse import ArgumentParser
 from json import loads
 import logging
-
+from os import getenv
 import websockets.sync.client
 from camera import Camera
+from dotenv import load_dotenv
 
 log = None
 camera = None
+load_dotenv()
+RASPI_TOKEN = getenv("RASPI_TOKEN")
 
 # create a logger
 def init_logger():
@@ -47,7 +50,9 @@ def main(url):
     while True:
         log.info(f'attempting connection to {url}')
         with websockets.sync.client.connect(url) as socket:
-            log.info('connection established')
+            log.info('connection established, authenticating...')
+            socket.send(RASPI_TOKEN)
+            log.info('authenticated')
             send_images(socket)
 
 if __name__ == '__main__':

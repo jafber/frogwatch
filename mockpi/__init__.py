@@ -6,7 +6,6 @@ from os import getenv
 from dotenv import load_dotenv
 
 load_dotenv(getenv("SECRET_FILE", "../secret.env"))
-BASE_URL = 'wss://frogwatch.jan-berndt.de/ws/raspi'
 RASPI_TOKEN = getenv("RASPI_TOKEN")
 
 async def maintain_connection(url, images, delay_s):

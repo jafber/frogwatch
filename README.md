@@ -1,8 +1,41 @@
-# Frogcam
+# Frogwatch
 
-2023, Jan Berndt (me@jan-berndt.de)
+This is the code for [frogwatch.jan-berndt.de](https://frogwatch.jan-berndt.de/index.html), a live camera stream of my family's frog terrarium. The camera is attached to a Raspberry PI continually streaming JPG images to a python websockets server. The server then sends the images out to any web client looking at the static vanilla HTML/JS webpage.
 
-## Raspberry Pi
+## Try it out locally
+
+To run the server locally, create a file with the secret passkey that your PI should use.
+
+```bash
+echo "RASPI_TOKEN=super-secret-token" > secret.env
+```
+
+Then simply start the application on port 3000 using the provided docker compose file.
+
+```bash
+docker compose -f docker-compose.yml up
+```
+
+To try actually sending pictures to the server, you can use the provided script `mockpi` that acts like the Raspberry PI, sending out some pre-saved images.
+
+```bash
+cd mockpi/
+python3 -m venv venv
+. venv/bin/activate
+pip install -r requirements.txt
+SECRET_FILE=../secret.env python __init__.py ws://localhost:3000/ws/raspi
+```
+
+You can even stream your own gifs using imagemagick!
+
+```bash
+apt install imagemagick
+convert frog-sitting.gif -coalesce %d.jpg
+```
+
+## Deploy to Raspberry PI
+
+These are mostly notes for myself, it gets hacky.
 
 ### ssh
 
@@ -41,98 +74,4 @@ cp raspi/scripts/dyndns raspi/scripts/saveip /usr/bin/
 ```
 * *     * * *   pi dyndns /var/log/cron/dyndns
 34 *    * * *   root supervisorctl restart frogcam
-```
-
-## Server
-
-### nginx
-
-`/etc/nginx/sites-available/jan-berndt.de.conf`
-
-```
-map $http_upgrade $connection_upgrade {
-	default upgrade;
-	'' close;
-}
-
-server {
-	listen 80;
-
-	...
-
-	# skip language check for frogcam
-	location /frogcam {
-		return 301 https://jan-berndt.de$request_uri;
-	}
-}
-
-server {
-	listen 443 ssl;
-
-	...
-
-	# frogcam websocket camera stream
-	location /frogcam/ws {
-		# https://websockets.readthedocs.io/en/stable/howto/nginx.html
-		# https://www.nginx.com/blog/websocket-nginx/
-		proxy_pass http://127.0.0.1:8001/;
-		proxy_http_version 1.1;
-		proxy_set_header Upgrade $http_upgrade;
-		proxy_set_header Connection $connection_upgrade;
-		proxy_set_header Host $host;
-	}
-
-	# frogcam html page
-	location /frogcam {
-		alias /home/frogcam/frogcam/front;
-	}
-}
-```
-
-### docker
-
-```bash
-chmod +x build run
-./build
-./run
-```
-
-## WSS API
-
-### /front
-
-```
-front > back {
-	'type': 'auth',
-	'session': 1234,
-}
-front > back {
-	'type': 'get_image',
-	'current_hash': 231 // 8-bit-uint created by XORing all bytes
-}
-front > back {
-	'type': 'move_servo',
-	'is_to_right': bool
-}
-back > front { blob }
-```
-
-### /raspi
-
-```
-back > raspi {
-	'type': 'init_stream',
-	'last_update': 12345
-}
-back > raspi {
-	'type': 'move_servo',
-	'is_to_right': bool
-}
-raspi > back { blob }
-```
-
-## Mock script
-
-```bash
-convert frog-sitting.gif -coalesce %d.jpg
 ```

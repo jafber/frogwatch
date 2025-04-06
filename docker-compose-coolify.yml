@@ -7,10 +7,8 @@ services:
     restart: always
 
   front:
-    image: nginx
-    expose:
-      - 80
-    volumes:
-      - ./front:/usr/share/nginx/html
-    ports:
-      - 8000:80
+    image: jafber/frogwatch-front
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always

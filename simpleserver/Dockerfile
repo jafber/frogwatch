@@ -1,5 +1,5 @@
 # docker build -t jafber/frogwatch-simpleserver .
-# docker run -p 8765:8765 jafber/frogwatch-simpleserver
+# docker run --rm -p 8765:8765 jafber/frogwatch-simpleserver
 
 FROM python:3.9-slim
 WORKDIR /simpleserver

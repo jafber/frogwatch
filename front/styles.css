@@ -104,3 +104,9 @@ button {
         flex-direction: column;
     }
 }
+
+@media (orientation: portrait) {
+    #controls  {
+        display: none !important;
+    }
+}

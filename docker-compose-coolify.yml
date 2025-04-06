@@ -1,8 +1,8 @@
 services:
-  simpleserver:
-    image: jafber/frogwatch-simpleserver
+  back:
+    image: jafber/frogwatch-back
     build:
-      context: ./simpleserver
+      context: ./back
       dockerfile: Dockerfile
     restart: always
 

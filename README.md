@@ -33,6 +33,21 @@ apt install imagemagick
 convert frog-sitting.gif -coalesce %d.jpg
 ```
 
+## Deploy Frontend & Backend to Coolify
+
+- Create new project "frogwatch"
+- New resource > Public repository > `https://github.com/jafber/frogwatch`
+- Use docker-compose with `/docker-compose-coolify.yml`
+- Set domains
+    - back `https://frogwatch.jan-berndt.de:3000/ws`
+    - front `https://frogwatch.jan-berndt.de`
+- Add raspberry pi access token as environment variable
+    - Environment Variables > Enable "Use docker build secrets"
+    - Add `RASPI_TOKEN`, make sure it is available at runtime
+- Now when running mockpi, you should see the gif at `https://frogwatch.jan-berndt.de`
+
+> *Note on domains:* Frontend calls `wss://frogwatch.jan-berndt.de/ws/front` and raspberry calls `wss://frogwatch.jan-berndt.de/ws/raspi`. Coolify does not support setting wss URLs explicitly. Instead, https will get upgraded to a websocket connection automatically.
+
 ## Deploy to Raspberry PI
 
 These are mostly notes for myself, it gets hacky.
@@ -69,7 +84,7 @@ cp raspi/scripts/dyndns raspi/scripts/saveip /usr/bin/
 
 **WARNING**: /etc/cron.hourly only gets executed as root, which is not the right environment
 
-`/etc/crontab`
+`crontab -e`
 
 ```
 * *     * * *   pi dyndns /var/log/cron/dyndns

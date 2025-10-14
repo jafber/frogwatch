@@ -9,6 +9,9 @@ from dotenv import load_dotenv
 log = None
 camera = None
 load_dotenv()
+
+# read the token for sending images to the server from env
+# the env var get set in the /etc/supervisor/conf.d/frogcam.conf
 RASPI_TOKEN = getenv("RASPI_TOKEN")
 
 # create a logger

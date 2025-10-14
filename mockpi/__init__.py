@@ -50,7 +50,8 @@ async def main(url, imgpath, delay_s):
         await asyncio.sleep(5)
 
 if __name__ == '__main__':
-    url = f'{sys.argv[1]}/ws/raspi'
+    root = sys.argv[1] if len(sys.argv) > 1 else 'wss://frogwatch.jan-berndt.de/ws'
+    url = f'{root}/raspi'
     print(f'using url {url}')
     asyncio.run(main(
         url=url,

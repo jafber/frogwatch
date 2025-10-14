@@ -3,7 +3,6 @@ import logging
 from os import getenv
 import websockets
 from connection_handler import ConnectionHandler
-import os
 
 # make logs look nice
 def configure_logging():

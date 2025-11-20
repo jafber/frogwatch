@@ -13,7 +13,14 @@ echo "RASPI_TOKEN=super-secret-token" > secret.env
 Then simply start the application on port 3000 using the provided docker compose file.
 
 ```bash
-docker compose -f docker-compose.yml up
+docker compose --env-file=secret.env up
+```
+
+You should be able to open the site under [http://localhost:3000](http://localhost:3000).
+Run a health check to see that the backend is up:
+
+```bash
+curl -f http://localhost:3000/ws/healthz
 ```
 
 To try actually sending pictures to the server, you can use the provided script `mockpi` that acts like the Raspberry PI, sending out some pre-saved images.

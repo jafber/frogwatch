@@ -1,16 +1,13 @@
 services:
   back:
-    image: jafber/frogwatch-back
     environment:
       - RASPI_TOKEN
-    build:
-      context: ./back
-      dockerfile: Dockerfile
+    build: ./back
 
-  front:
-    image: nginx
-    volumes:
-      - ./front:/usr/share/nginx/html
-      - ./nginx.conf:/etc/nginx/nginx.conf
+  caddy:
+    image: caddy:alpine
     ports:
-      - 3000:80
+      - "3000:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./front:/srv:ro

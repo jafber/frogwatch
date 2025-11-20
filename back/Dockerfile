@@ -1,5 +1,5 @@
 # docker build -t jafber/frogwatch-back .
-# docker run --rm -p 3000:3000 jafber/frogwatch-back
+# docker run --env-file=../secret.env --rm -p 3000:3000 jafber/frogwatch-back
 
 FROM python:3.9-slim
 WORKDIR /back

@@ -6,8 +6,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/healthz"] 
-      interval: 30s
+      test: ["CMD", "curl", "-f", "http://localhost:3000/healthz"] 
+      interval: 10s
       timeout: 3s
       retries: 3
 
@@ -19,6 +19,6 @@ services:
     restart: always
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"] 
-      interval: 30s
+      interval: 10s
       timeout: 3s
       retries: 3

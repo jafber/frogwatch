@@ -3,6 +3,8 @@
 
 FROM python:3.9-slim
 WORKDIR /back
+# for health check
+RUN apt-get update && apt-get install -y curl
 COPY * .
 RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 3000

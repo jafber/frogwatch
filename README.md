@@ -20,7 +20,10 @@ You should be able to open the site under [http://localhost:3000](http://localho
 Run a health check to see that the backend is up:
 
 ```bash
+docker compose ps
+# frogwatch-back-1 STATUS: healthy
 curl -f http://localhost:3000/ws/healthz
+# OK
 ```
 
 To try actually sending pictures to the server, you can use the provided script `mockpi` that acts like the Raspberry PI, sending out some pre-saved images.

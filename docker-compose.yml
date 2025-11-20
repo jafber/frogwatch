@@ -3,6 +3,11 @@ services:
     environment:
       - RASPI_TOKEN
     build: ./back
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/healthz"] 
+      interval: 10s
+      timeout: 3s
+      retries: 3
 
   caddy:
     image: caddy:alpine

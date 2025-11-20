@@ -73,11 +73,12 @@ class ConnectionHandler:
 
     # handle incoming connections
     async def handle(self, conn):
-        logging.info(f'got connection to {conn.path}')
-        if conn.path.endswith('/front'):
+        path = conn.request.path
+        logging.info(f'got connection to {path}')
+        if path.endswith('/front'):
             await self.handle_front(conn)
-        elif conn.path.endswith('/raspi'):
+        elif path.endswith('/raspi'):
             await self.handle_raspi(conn)
         else:
-            logging.warning(f'unknown connection path {conn.path}')
+            logging.warning(f'unknown connection path {path}')
             await conn.close()

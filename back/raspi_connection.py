@@ -1,5 +1,6 @@
 from time import time
 import logging
+from websockets.protocol import State
 
 class RaspiConnection:
     def __init__(self, socket, handler, token):
@@ -30,7 +31,7 @@ class RaspiConnection:
 
     # keep the connection open and respond to requests
     async def keep_open(self):
-        while not self.socket.closed:
+        while self.socket.state == State.OPEN:
             self.handler.current_image = await self.socket.recv()
             # logging.info(f'received image {self.handler.current_image_id()}')
             # directly send image to all frontends that are currently waiting

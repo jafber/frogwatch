@@ -33,7 +33,7 @@ cd mockpi/
 python3 -m venv venv
 . venv/bin/activate
 pip install -r requirements.txt
-SECRET_FILE=../secret.env python __init__.py ws://localhost:3000/ws/raspi
+SECRET_FILE=../secret.env python __init__.py ws://localhost:3000/ws
 ```
 
 You can even stream your own gifs using imagemagick!

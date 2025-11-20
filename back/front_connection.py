@@ -2,6 +2,7 @@ import json
 import logging
 
 from raspi_connection import RaspiConnection
+from websockets.protocol import State
 
 class FrontConnection:
     def __init__(self, socket, handler):
@@ -40,7 +41,7 @@ class FrontConnection:
 
     # keep the connection open and respond to requests
     async def keep_open(self):
-        while not self.socket.closed:
+        while self.socket.state == State.OPEN:
             msgraw = await self.socket.recv()
             logging.info(f'frontend received "{msgraw}"')
             msg = json.loads(msgraw)

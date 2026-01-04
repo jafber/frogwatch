@@ -1,13 +1,13 @@
 services:
   back:
-    environment:
-      - RASPI_TOKEN
     build: ./back
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/healthz"] 
       interval: 10s
       timeout: 3s
       retries: 3
+    secrets:
+      - raspi_token
 
   caddy:
     image: caddy:alpine
@@ -16,3 +16,7 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - ./front:/srv:ro
+
+secrets:
+  raspi_token:
+    file: ./raspi_token.txt

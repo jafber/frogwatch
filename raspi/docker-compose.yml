@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  raspi-script:
+    build: .
+    container_name: raspi-script
+    restart: always
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WS_URL=your_public_endpoint_url
+    secrets:
+      - raspi_token
+    devices:
+      - "/dev/vchiq:/dev/vchiq"
+    privileged: true
+
+secrets:
+  raspi_token:
+    file: ../raspi_token.txt

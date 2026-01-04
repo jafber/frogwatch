@@ -22,13 +22,6 @@ class RaspiConnection:
             'last_update': int(time()),
         }
 
-    # generate a message for moving the servo motor
-    def servo_msg(is_to_right):
-        return {
-            'type': 'move_servo',
-            'is_to_right': is_to_right,
-        }
-
     # keep the connection open and respond to requests
     async def keep_open(self):
         while self.socket.state == State.OPEN:

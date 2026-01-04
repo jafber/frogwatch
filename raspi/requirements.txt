@@ -1,0 +1,4 @@
+picamera2
+websockets
+dotenv
+RPi.GPIO

@@ -7,3 +7,4 @@ node_modules/
 .vscode/
 .misc/
 *.env
+raspi_token.txt

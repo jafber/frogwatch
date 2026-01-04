@@ -8,15 +8,6 @@ from camera import Camera
 log = None
 camera = None
 
-# Read the token for sending images to the server from Docker secret
-def read_secret(secret_path):
-    try:
-        with open(secret_path, "r") as f:
-            return f.read().strip()
-    except Exception as e:
-        logging.error(f"Could not read secret token: {e}")
-        return None
-
 # create a logger
 def init_logger():
     log_format = "%(asctime)s [%(levelname)s]\t%(message)s"
@@ -72,14 +63,14 @@ if __name__ == '__main__':
     parser.add_argument(
         '--token', 
         help='Secret token for authentication', 
-        default=read_secret("/run/secrets/raspi_token")
+        default=getenv("RASPI_TOKEN")
     )
     args = parser.parse_args()
     if not args.url:
         log.error('No WebSocket URL provided via --url or WS_URL env variable.')
         exit(1)
     if not args.token:
-        log.error('No secret token provided via --token or Docker secret.')
+        log.error('No secret token provided via --token or RASPI_TOKEN env variable.')
         exit(1)
 
     main(args.url, args.token)

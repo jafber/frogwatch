@@ -7,15 +7,16 @@ This is the code for [frogwatch.jan-berndt.de](https://frogwatch.jan-berndt.de/i
 To run the server locally, create a file with the secret passkey that your PI should use.
 
 ```bash
-echo "..." > raspi_token.txt
+echo "RASPI_TOKEN=super-secret-token" > secret.env
 ```
 
 Then simply start the application on port 3000 using the provided docker compose file.
 
 ```bash
-docker compose up
+docker compose --env-file=secret.env up
 ```
 
+This will always run the container, even restarting with the environment variable after a reboot.
 You should be able to open the site under [http://localhost:3000](http://localhost:3000).
 Run a health check to see that the backend is up:
 

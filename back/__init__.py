@@ -4,15 +4,7 @@ from websockets.asyncio.server import serve
 from connection_handler import ConnectionHandler
 from http import HTTPStatus
 from argparse import ArgumentParser
-
-# Read the token for sending images to the server from Docker secret
-def read_secret(secret_path):
-    try:
-        with open(secret_path, "r") as f:
-            return f.read().strip()
-    except Exception as e:
-        logging.error(f"Could not read secret token: {e}")
-        return None
+from os import getenv
 
 # make logs look nice
 def configure_logging():
@@ -39,11 +31,11 @@ if __name__ == '__main__':
     parser.add_argument(
         '--token', 
         help='Secret token for authentication', 
-        default=read_secret("/run/secrets/raspi_token")
+        default=getenv("RASPI_TOKEN")
     )
     args = parser.parse_args()
     if not args.token:
-        logging.error('No secret token provided via --token or Docker secret.')
+        logging.error('No secret token provided via --token or RASPI_TOKEN environment variable.')
         exit(1)
 
     logging.info("starting up")

@@ -6,8 +6,8 @@ services:
       interval: 10s
       timeout: 3s
       retries: 3
-    secrets:
-      - raspi_token
+    environment:
+      - RASPI_TOKEN
 
   caddy:
     image: caddy:alpine
@@ -16,7 +16,3 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - ./front:/srv:ro
-
-secrets:
-  raspi_token:
-    file: ./raspi_token.txt

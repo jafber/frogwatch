@@ -128,12 +128,33 @@ Then connect to the VPN and `ssh raspi`
 
 ## Deploy to Raspberry PI
 
-### Install Docker
+Containerization does not make sense since we need to access hardware like the camera directly.
+Use supervisor to run the app directly.
 
 ```
-sudo apt install docker
+sudo apt update
+sudo apt install -y \
+    python3-dev
+    pkg-config \
+    supervisor \
+    tmux
+tmux new-session -A -s main
+git clone https://github.com/jafber/frogwatch
+cd frogwatch/raspi
+echo "RASPI_TOKEN=super-secret-token" > secret.env
+echo "WS_URL=wss://frogwatch.jan-berndt.de/ws/raspi" >> secret.env
+# picamera2 is pre-installed, see https://forums.raspberrypi.com/viewtopic.php?t=367558
+python3 -m venv --system-site-packages .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+sudo mkdir -p /var/log/frogwatch
+sudo cp frogwatch.conf /etc/supervisor/conf.d/
+sudo service supervisor start
+sudo supervisorctl reload
+sudo supervisorctl status frogwatch
 ```
 
+To start the supervisor manually and troubleshoot, use `sudo /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf`
 
 ### libcamera
 

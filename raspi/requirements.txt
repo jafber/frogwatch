@@ -1,3 +1,2 @@
 picamera2
-websockets
-RPi.GPIO
+websockets==15.0.1

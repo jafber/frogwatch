@@ -3,6 +3,7 @@ venv/
 __pycache__/
 secret.py
 node_modules/
+dist/
 .experiments/
 .vscode/
 .misc/

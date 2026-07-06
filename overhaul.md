@@ -65,7 +65,7 @@ Pin one MediaMTX version everywhere (latest stable 1.x at implementation time; P
 
 ### VPS `vps/mediamtx.yml`
 - SRT :8890, RTSP :8554 (internal + fallback ingest), HLS :8888 with `hlsVariant: fmp4` (classic, not LL — robust through proxies), `hlsSegmentDuration: 2s`, `hlsSegmentCount: 7` (~6–10s latency).
-- `authInternalUsers`: anonymous read-only; `${MTX_PUBLISH_USER}` publish-only on path `frog`. Path `frog`: `srtPublishPassphrase: ${SRT_PASSPHRASE}` (10–64 chars — libsrt allows up to 79 but the Pi's ffmpeg 4.3 `-passphrase` option caps at 64; stay ≤64). MediaMTX expands `${VAR}` from env natively — Coolify env vars, no templating on VPS.
+- `authInternalUsers`: anonymous read-only; publisher user publish-only on path `frog`. Path `frog`: `srtPublishPassphrase` (10–64 chars — libsrt allows up to 79 but the Pi's ffmpeg 4.3 `-passphrase` option caps at 64; stay ≤64). **Correction:** MediaMTX does NOT expand `${VAR}` inside the yml; secrets are injected via its `MTX_*` env-override mechanism instead (`MTX_PATHS_FROG_SRTPUBLISHPASSPHRASE`, `MTX_AUTHINTERNALUSERS_1_USER/_PASS`) — still just Coolify env vars, no templating on VPS.
 
 ### `docker-compose.yml`
 - `mediamtx`: pinned image, `restart: always`, `ports: ["8890:8890/udp"]`, config mounted ro, wget healthcheck on :8888.

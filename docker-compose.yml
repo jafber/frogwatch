@@ -1,18 +1,42 @@
 services:
-  back:
-    build: ./back
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/healthz"] 
-      interval: 10s
-      timeout: 3s
-      retries: 3
-    environment:
-      - RASPI_TOKEN
-
-  caddy:
-    image: caddy:alpine
+  mediamtx:
+    image: bluenviron/mediamtx:1.19.2
+    restart: always
     ports:
-      - "3000:80"
+      - "8890:8890/udp" # SRT ingest from the Pi; open this in the cloud firewall too
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./front:/srv:ro
+      - ./vps/mediamtx.yml:/mediamtx.yml:ro
+    environment:
+      MTX_PATHS_FROG_SRTPUBLISHPASSPHRASE: ${SRT_PASSPHRASE}
+      MTX_AUTHINTERNALUSERS_1_USER: ${MTX_PUBLISH_USER}
+      MTX_AUTHINTERNALUSERS_1_PASS: ${MTX_PUBLISH_PASS}
+
+  front:
+    build: ./front
+    restart: always
+    depends_on:
+      - mediamtx
+    volumes:
+      - photos:/photos:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:80/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  photod:
+    build: ./photod
+    restart: always
+    depends_on:
+      - mediamtx
+    environment:
+      TZ: ${TZ:-Europe/Berlin}
+      RTSP_URL: rtsp://mediamtx:8554/frog
+      DAYLIGHT_START: "08:00"
+      DAYLIGHT_END: "20:00"
+      SAMPLE_INTERVAL_MIN: "10"
+    volumes:
+      - photos:/photos
+
+volumes:
+  photos:

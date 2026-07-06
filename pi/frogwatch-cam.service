@@ -1,0 +1,14 @@
+[Unit]
+Description=Frogwatch camera stream (MediaMTX)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+ExecStart=/opt/mediamtx/current/mediamtx /etc/frogwatch/mediamtx.yml
+Restart=always
+RestartSec=5
+User=pi
+SupplementaryGroups=video
+[Install]
+WantedBy=multi-user.target

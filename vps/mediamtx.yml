@@ -1,0 +1,54 @@
+# MediaMTX config for the VPS (pinned image: bluenviron/mediamtx:1.19.2).
+# Secrets are injected via MTX_* environment variables in docker-compose.yml:
+#   MTX_PATHS_FROG_SRTPUBLISHPASSPHRASE  <- SRT_PASSPHRASE
+#   MTX_AUTHINTERNALUSERS_1_USER/_PASS   <- MTX_PUBLISH_USER/PASS
+# (MediaMTX does not expand ${VAR} inside this file.)
+
+logLevel: info
+
+api: no
+metrics: no
+pprof: no
+playback: no
+rtmp: no
+webrtc: no
+moq: no
+
+# internal only (photod reads, RTSP fallback ingest); not published to the host
+rtsp: yes
+rtspAddress: :8554
+rtspTransports: [tcp]
+rtspEncryption: "no"
+
+# proxied by front caddy under /stream/*
+hls: yes
+hlsAddress: :8888
+hlsEncryption: no
+hlsVariant: fmp4
+hlsSegmentCount: 7
+hlsSegmentDuration: 2s
+
+# public ingest from the Pi (only host-published port, 8890/udp)
+srt: yes
+srtAddress: :8890
+
+authMethod: internal
+authInternalUsers:
+  # index 0: anonymous, read-only
+  - user: any
+    pass:
+    ips: []
+    permissions:
+      - action: read
+  # index 1: publisher; credentials overridden via env (see header)
+  - user: frogpublisher
+    pass: change-me
+    ips: []
+    permissions:
+      - action: publish
+        path: frog
+
+paths:
+  frog:
+    source: publisher
+    # srtPublishPassphrase comes from MTX_PATHS_FROG_SRTPUBLISHPASSPHRASE

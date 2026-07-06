@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --green: darkgreen;
+    font-size: 16px;
+    font-family: sans-serif;
+}
+
+body {
+    min-height: 100dvh;
+    background-color: #fff;
+    color: #222;
+    padding-bottom: 1.75rem;
+}
+
+/* FOOTER */
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1.75rem;
+    background-color: var(--green);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0 1rem;
+    z-index: 2;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.75rem;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

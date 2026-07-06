@@ -1,0 +1,11 @@
+# local override: docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
+services:
+  front:
+    ports:
+      - "8080:80"
+
+  photod:
+    environment:
+      SAMPLE_INTERVAL_MIN: "1"
+      DAYLIGHT_START: "00:00"
+      DAYLIGHT_END: "24:00"

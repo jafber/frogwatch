@@ -83,10 +83,18 @@ EOF
     fail "created $ENV_FILE skeleton — fill in the secrets and re-run"
 fi
 chmod 600 "$ENV_FILE"
-# shellcheck disable=SC1090
-. "$ENV_FILE"
-[ -n "${MTX_PUBLISH_PASS:-}" ] || fail "MTX_PUBLISH_PASS empty in $ENV_FILE"
-[ -n "${SRT_PASSPHRASE:-}" ] || fail "SRT_PASSPHRASE empty in $ENV_FILE"
+# read KEY=VALUE without sourcing (values must never hit the shell)
+getvar() { sed -n "s/^$1=//p" "$ENV_FILE" | tail -1; }
+VPS_HOST=$(getvar VPS_HOST)
+MTX_PUBLISH_USER=$(getvar MTX_PUBLISH_USER)
+MTX_PUBLISH_PASS=$(getvar MTX_PUBLISH_PASS)
+SRT_PASSPHRASE=$(getvar SRT_PASSPHRASE)
+PUSH_MODE=$(getvar PUSH_MODE)
+[[ "$VPS_HOST" =~ ^[A-Za-z0-9._-]+$ ]] || fail "VPS_HOST missing/invalid in $ENV_FILE"
+for var in MTX_PUBLISH_USER MTX_PUBLISH_PASS SRT_PASSPHRASE; do
+    [[ "${!var}" =~ ^[A-Za-z0-9_-]+$ ]] || \
+        fail "$var must be non-empty and URL-safe ([A-Za-z0-9_-]) in $ENV_FILE — it is embedded in stream URLs"
+done
 PASSLEN=${#SRT_PASSPHRASE}
 { [ "$PASSLEN" -ge 10 ] && [ "$PASSLEN" -le 64 ]; } || fail "SRT_PASSPHRASE must be 10-64 chars"
 [ "${PUSH_MODE:-auto}" = "auto" ] && PUSH_MODE=$DETECTED_PUSH_MODE

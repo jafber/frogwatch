@@ -1,11 +1,11 @@
 services:
   mediamtx:
-    image: bluenviron/mediamtx:1.19.2
+    # config baked into the image: Coolify doesn't sync repo files for bind
+    # mounts, only the compose file itself
+    build: ./vps
     restart: always
     ports:
       - "8890:8890/udp" # SRT ingest from the Pi; open this in the cloud firewall too
-    volumes:
-      - ./vps/mediamtx.yml:/mediamtx.yml:ro
     environment:
       MTX_PATHS_FROG_SRTPUBLISHPASSPHRASE: ${SRT_PASSPHRASE}
       MTX_AUTHINTERNALUSERS_1_USER: ${MTX_PUBLISH_USER}

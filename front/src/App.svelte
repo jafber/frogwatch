@@ -20,7 +20,8 @@
 
 <style>
     header {
-        padding: 1rem;
+        /* no bottom padding: the frog logo sits flush on top of the player */
+        padding: 1rem 1rem 0;
         display: flex;
         justify-content: space-between;
         align-items: end;
@@ -31,11 +32,14 @@
     h1 {
         font-size: 2rem;
         color: var(--green);
+        padding-bottom: 0.5rem;
     }
 
     header img {
+        display: block;
         width: 3rem;
         height: 3rem;
+        margin-right: 1rem;
     }
 
     main {

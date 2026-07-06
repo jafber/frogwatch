@@ -9,7 +9,7 @@ set -euo pipefail
 
 MEDIAMTX_VERSION=v1.19.2
 MEDIAMTX_SHA256=de0afed5ba33df231a6c3321207b4a906f1da9be7ce8b3efac008928e982ca6d
-REPO_RAW=https://raw.githubusercontent.com/jafber/frogwatch/master
+REPO_RAW=https://raw.githubusercontent.com/jafber/frogwatch/main
 
 ENV_FILE=/etc/frogwatch/frogwatch.env
 CONFIG=/etc/frogwatch/mediamtx.yml

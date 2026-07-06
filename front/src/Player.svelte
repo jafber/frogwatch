@@ -45,7 +45,12 @@
                 offline = true;
                 return;
             }
-            hls = new Hls();
+            hls = new Hls({
+                // live stream: show LIVE instead of a growing duration,
+                // and evict footage >30s behind the playhead (RAM cap)
+                liveDurationInfinity: true,
+                backBufferLength: 30,
+            });
             hls.loadSource(src);
             hls.attachMedia(video);
             hls.on(Hls.Events.FRAG_LOADED, () => {

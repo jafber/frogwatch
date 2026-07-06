@@ -78,7 +78,7 @@ Debugging on the Pi (over WireGuard):
 
 ```bash
 ssh raspi journalctl -u frogwatch-cam -f
-ffprobe rtsp://10.8.0.2:8554/cam          # raw camera stream, h264 1280x720
+ffprobe rtsp://10.8.0.2:8554/cam          # raw camera stream, h264 1280x960
 ```
 
 ## Verification
@@ -86,7 +86,7 @@ ffprobe rtsp://10.8.0.2:8554/cam          # raw camera stream, h264 1280x720
 | What | Command | Expect |
 |---|---|---|
 | Pi service | `ssh raspi systemctl is-active frogwatch-cam` | `active` |
-| Camera→RTSP | `ffprobe rtsp://10.8.0.2:8554/cam` (on WG) | h264 1280x720 |
+| Camera→RTSP | `ffprobe rtsp://10.8.0.2:8554/cam` (on WG) | h264 1280x960 |
 | VPS ingest | mediamtx container logs | `is publishing to path 'frog'` |
 | HLS | `curl -fL https://frogwatch.jan-berndt.de/stream/frog/index.m3u8` | m3u8 |
 | Site | `curl -f https://frogwatch.jan-berndt.de/healthz` | `OK` |

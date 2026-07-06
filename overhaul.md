@@ -58,7 +58,7 @@ Pin one MediaMTX version everywhere (latest stable 1.x at implementation time; P
 
 ### Pi `pi/mediamtx.yml.tpl` (rendered by envsubst from `/etc/frogwatch/frogwatch.env`, chmod 600)
 - Disable api/metrics/hls/webrtc/srt/rtmp; RTSP on :8554 (localhost relay source + WG debugging).
-- Path `cam`: `source: rpiCamera`, 1280x720@25 (720p uses full-FoV binned mode on Camera V2; 1080p would crop), `rpiCameraBitrate: 2000000`, `rpiCameraIDRPeriod: 50` (keyframe/2s = 1 HLS segment).
+- Path `cam`: `source: rpiCamera`, 1280x960@25 with `rpiCameraMode: 1640:1232:10:P`, `rpiCameraBitrate: 2000000`, `rpiCameraIDRPeriod: 50` (keyframe/2s = 1 HLS segment). **Correction (found live):** requesting 720p without pinning the mode made libcamera pick the 1920x1080 sensor mode = center crop, narrow FoV; the binned full-sensor mode must be forced explicitly, and 4:3 output keeps the full FoV.
 - `runOnReady` (SRT primary):
   `ffmpeg -rtsp_transport tcp -i rtsp://localhost:8554/cam -c copy -f mpegts "srt://${VPS_HOST}:8890?streamid=publish:frog&passphrase=${SRT_PASSPHRASE}&pkt_size=1316"`
   Fallback variant (PUSH_MODE var): `-f rtsp rtsp://${USER}:${PASS}@${VPS_HOST}:8554/frog`. `runOnReadyRestart: yes`.

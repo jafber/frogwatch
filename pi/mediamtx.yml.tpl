@@ -23,9 +23,12 @@ rtspEncryption: "no"
 paths:
   cam:
     source: rpiCamera
-    # 720p = full-FoV binned mode on the Camera V2; 1080p would crop
+    # pin the 2x2-binned full-sensor mode; without this libcamera picks the
+    # 1920x1080 sensor mode, which is a center crop (narrow FoV).
+    # 4:3 output keeps the full field of view, like the old app's stills.
+    rpiCameraMode: 1640:1232:10:P
     rpiCameraWidth: 1280
-    rpiCameraHeight: 720
+    rpiCameraHeight: 960
     rpiCameraFPS: 25
     rpiCameraBitrate: 2000000
     # keyframe every 2s = one HLS segment on the VPS

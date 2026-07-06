@@ -50,7 +50,7 @@
     img {
         display: block;
         width: 100%;
-        aspect-ratio: 16 / 9;
+        aspect-ratio: 4 / 3;
         object-fit: cover;
         border-radius: 0.375rem;
         background-color: #eee;

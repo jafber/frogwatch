@@ -103,7 +103,7 @@
     video {
         display: block;
         width: 100%;
-        aspect-ratio: 16 / 9;
+        aspect-ratio: 4 / 3;
         background-color: black;
     }
 
